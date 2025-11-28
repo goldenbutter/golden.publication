@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<publications>
+	<publication>
+		<id>c3f2b3e4-7d26-4a84-a628-e596f94b1315</id>
+		<publication_type>Datasheet</publication_type>
+		<title>AX3000 Power Regulator</title>
+		<description>High-efficiency power regulator designed for embedded and industrial systems.</description>
+		<isbn>978-1-55678-0011</isbn>
+
+		<versions>
+			<version>
+				<id>7d109c59-4e67-4c94-bcb6-a1e850289c32</id>
+				<publication_guid>c3f2b3e4-7d26-4a84-a628-e596f94b1315</publication_guid>
+				<version>1</version>
+				<language>en-US</language>
+				<cover_title>AX3000 Power Regulator v1</cover_title>
+			</version>
+			<version>
+				<id>ac2a3f37-174c-49d8-9b89-0e2d1d3dffe8</id>
+				<publication_guid>c3f2b3e4-7d26-4a84-a628-e596f94b1315</publication_guid>
+				<version>1.1</version>
+				<language>en-US</language>
+				<cover_title>AX3000 Power Regulator v1.1</cover_title>
+			</version>
+		</versions>
+	</publication>
+	<publication>
+		<id>53c0a927-d475-4c75-b8e3-4b78e26db8b4</id>
+		<publication_type>User Manual</publication_type>
+		<title>SmartHome Hub Controller</title>
+		<description>User manual for configuring and maintaining the SmartHome Hub device.</description>
+		<isbn>978-1-55678-0012</isbn>
+
+		<versions>
+			<version>
+				<id>1fd6fe24-b65c-4ce3-8cc1-41cf6a5ce7ea</id>
+				<publication_guid>53c0a927-d475-4c75-b8e3-4b78e26db8b4</publication_guid>
+				<version>1</version>
+				<language>en-US</language>
+				<cover_title>SmartHome Hub Controller v1</cover_title>
+			</version>
+			<version>
+				<id>83ea6ffb-5138-47e1-b197-cd2c5a6cc9e4</id>
+				<publication_guid>53c0a927-d475-4c75-b8e3-4b78e26db8b4</publication_guid>
+				<version>2</version>
+				<language>en-US</language>
+				<cover_title>SmartHome Hub Controller v2</cover_title>
+			</version>
+			<version>
+				<id>a7bfb9e3-96fb-48f6-8b91-0a708774b3c0</id>
+				<publication_guid>53c0a927-d475-4c75-b8e3-4b78e26db8b4</publication_guid>
+				<version>2.1</version>
+				<language>en-US</language>
+				<cover_title>SmartHome Hub Controller v2.1</cover_title>
+			</version>
+		</versions>
+	</publication>
+	<publication>
+		<id>9eaee44e-31f7-4a82-b45e-6a4690591f7f</id>
+		<publication_type>Online References</publication_type>
+		<title>Networking API Reference Guide</title>
+		<description>Documentation of the core networking API functions and data structures.</description>
+		<isbn>978-1-55678-0013</isbn>
+
+		<versions>
+			<version>
+				<id>b8bbd5cd-2e2b-4422-9c4e-dae4a7106d57</id>
+				<publication_guid>9eaee44e-31f7-4a82-b45e-6a4690591f7f</publication_guid>
+				<version>1</version>
+				<language>en-US</language>
+				<cover_title>Networking API Reference v1</cover_title>
+			</version>
+			<version>
+				<id>4fb43b5e-f33d-4e64-938b-1b8932ad3428</id>
+				<publication_guid>9eaee44e-31f7-4a82-b45e-6a4690591f7f</publication_guid>
+				<version>1.2</version>
+				<language>en-US</language>
+				<cover_title>Networking API Reference v1.2</cover_title>
+			</version>
+		</versions>
+	</publication>
+	<publication>
+		<id>0e9ab1fc-7b1f-4d91-bdf6-79c92f73aae1</id>
+		<publication_type>Datasheet</publication_type>
+		<title>HX500 Sensor Module</title>
+		<description>Specifications for the HX500 temperature and humidity sensor module.</description>
+		<isbn>978-1-55678-0014</isbn>
+
+		<versions>
+			<version>
+				<id>f08716f7-bcb6-437a-83f5-3557b938d41b</id>
+				<publication_guid>0e9ab1fc-7b1f-4d91-bdf6-79c92f73aae1</publication_guid>
+				<version>1</version>
+				<language>en-US</language>
+				<cover_title>HX500 Sensor Module v1</cover_title>
+			</version>
+		</versions>
+	</publication>
+	<publication>
+		<id>4fa5e960-7440-48ba-a2e5-34efec07f9ba</id>
+		<publication_type>User Manual</publication_type>
+		<title>Industrial Motor Driver Manual</title>
+		<description>User manual for the MX series industrial motor driver system.</description>
+		<isbn>978-1-55678-0015</isbn>
+
+		<versions>
+			<version>
+				<id>ab8da42c-3447-4f7b-afd7-4b733d8cea7d</id>
+				<publication_guid>4fa5e960-7440-48ba-a2e5-34efec07f9ba</publication_guid>
+				<version>1</version>
+				<language>en-US</language>
+				<cover_title>Industrial Motor Driver Manual v1</cover_title>
+			</version>
+			<version>
+				<id>52b5a71e-82a3-4b59-802c-04a5098d9a21</id>
+				<publication_guid>4fa5e960-7440-48ba-a2e5-34efec07f9ba</publication_guid>
+				<version>1.1</version>
+				<language>en-US</language>
+				<cover_title>Industrial Motor Driver Manual v1.1</cover_title>
+			</version>
+		</versions>
+	</publication>
+	<publication>
+		<id>bd4d41be-a18f-4684-aa86-7f9bcba9308c</id>
+		<publication_type>Online References</publication_type>
+		<title>Cloud Service SDK Reference</title>
+		<description>Technical reference for the cloud SDK used in distributed applications.</description>
+		<isbn>978-1-55678-0016</isbn>
+
+		<versions>
+			<version>
+				<id>e0c309e5-7085-4bdf-8b4f-3ab510a4a830</id>
+				<publication_guid>bd4d41be-a18f-4684-aa86-7f9bcba9308c</publication_guid>
+				<version>2</version>
+				<language>en-US</language>
+				<cover_title>Cloud Service SDK Reference v2</cover_title>
+			</version>
+			<version>
+				<id>7327e38c-d1af-42f2-a641-dcd988ee23ef</id>
+				<publication_guid>bd4d41be-a18f-4684-aa86-7f9bcba9308c</publication_guid>
+				<version>2.3</version>
+				<language>en-US</language>
+				<cover_title>Cloud Service SDK Reference v2.3</cover_title>
+			</version>
+		</versions>
+	</publication>
+	<publication>
+		<id>7d80ac2d-b02a-4610-a73e-2f975b51192d</id>
+		<publication_type>Datasheet</publication_type>
+		<title>ZR1000 Microcontroller Unit</title>
+		<description>Datasheet for the ZR1000 low-power ARM-based microcontroller.</description>
+		<isbn>978-1-55678-0017</isbn>
+
+		<versions>
+			<version>
+				<id>02ca7485-f189-49cd-9ad4-ef0af69ad2c5</id>
+				<publication_guid>7d80ac2d-b02a-4610-a73e-2f975b51192d</publication_guid>
+				<version>1</version>
+				<language>en-US</language>
+				<cover_title>ZR1000 Microcontroller v1</cover_title>
+			</version>
+		</versions>
+	</publication>
+	<publication>
+		<id>561a7fcb-181d-4d34-9923-942622a6894f</id>
+		<publication_type>User Manual</publication_type>
+		<title>Enterprise Security Suite Manual</title>
+		<description>Comprehensive guide to installing and configuring the Enterprise Security Suite.</description>
+		<isbn>978-1-55678-0018</isbn>
+
+		<versions>
+			<version>
+				<id>a9110d31-0714-4f43-9c21-b9dfc6993961</id>
+				<publication_guid>561a7fcb-181d-4d34-9923-942622a6894f</publication_guid>
+				<version>1</version>
+				<language>en-US</language>
+				<cover_title>Enterprise Security Suite v1</cover_title>
+			</version>
+			<version>
+				<id>a98aefab-a4f7-4cc3-8fa8-74df90c3fa22</id>
+				<publication_guid>561a7fcb-181d-4d34-9923-942622a6894f</publication_guid>
+				<version>1.2</version>
+				<language>en-US</language>
+				<cover_title>Enterprise Security Suite v1.2</cover_title>
+			</version>
+		</versions>
+	</publication>
+	<publication>
+		<id>8f5e89a4-2d52-4ef3-a6c0-4ca147d64d50</id>
+		<publication_type>Online References</publication_type>
+		<title>Database Optimization Reference</title>
+		<description>Technical guide on SQL optimization, indexing, and performance tuning.</description>
+		<isbn>978-1-55678-0019</isbn>
+
+		<versions>
+			<version>
+				<id>d77a0a8e-f9e3-4faa-9487-514dc0b49bb7</id>
+				<publication_guid>8f5e89a4-2d52-4ef3-a6c0-4ca147d64d50</publication_guid>
+				<version>1</version>
+				<language>en-US</language>
+				<cover_title>Database Optimization Reference v1</cover_title>
+			</version>
+		</versions>
+	</publication>
+	<publication>
+		<id>cde1dc0f-850e-4223-b2cf-76891a7df6d2</id>
+		<publication_type>User Manual</publication_type>
+		<title>Virtualization Platform User Guide</title>
+		<description>Instructions and technical reference for the HyperFlex Virtualization Platform.</description>
+		<isbn>978-1-55678-0020</isbn>
+
+		<versions>
+			<version>
+				<id>f7b2fd93-52ac-4a7a-a368-e4b4d251ba21</id>
+				<publication_guid>cde1dc0f-850e-4223-b2cf-76891a7df6d2</publication_guid>
+				<version>3</version>
+				<language>en-US</language>
+				<cover_title>Virtualization Platform User Guide v3</cover_title>
+			</version>
+			<version>
+				<id>21de99af-1862-4d59-a388-d985255ede7f</id>
+				<publication_guid>cde1dc0f-850e-4223-b2cf-76891a7df6d2</publication_guid>
+				<version>3.1</version>
+				<language>en-US</language>
+				<cover_title>Virtualization Platform User Guide v3.1</cover_title>
+			</version>
+		</versions>
+	</publication>
+
+</publications>
