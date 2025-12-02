@@ -136,10 +136,7 @@ You may use or modify these components as you see fit.
 
 ## Submitting Your Work
 
-You may submit your work through either:
-
-1. **Zipping the repository** and sending the archive or link via your HR recruiter.
-2. **Submitting a pull request** to the provided repository.
+You may submit your work by **zipping the repository** and sending the archive or link via your HR recruiter.
 
 Coordinate with your HR representative if another method is preferred.
 
