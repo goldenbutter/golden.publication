@@ -1,4 +1,4 @@
-version: "3.9"
+#version: "3.9"
 
 services:
   api:
@@ -8,12 +8,13 @@ services:
     image: publications-api:latest
     container_name: publications_api
     environment:
-      # Program.cs prefers PUBLICATION_XML_FILE if present (we set this in the API Dockerfile),
-      # so no need to pass here unless you want to override.
-      # PUBLICATION_XML_FILE: /app/Data/publications.xml
       ASPNETCORE_URLS: http://+:8080
-    ports:
-      - "5031:8080"  # host:container
+    expose:      
+      - "8080"      # internal network only    
+    # no host ports; proxy reaches it by service name
+    #ports:
+    #  - "5031:8080"  # host:container
+  
 
   client:
     build:
@@ -21,7 +22,20 @@ services:
       dockerfile: Dockerfile
     image: publications-client:latest
     container_name: publications_client
-    ports:
-      - "5173:80"    # host:container (Nginx in the client image serves on :80)
+    expose:
+      - "80"   # internal network only
+    #ports:
+    #  - "5173:80"    # host:container
     depends_on:
       - api
+
+  reverse-proxy:    
+    image: nginx:alpine
+    container_name: publications_reverse_proxy
+    volumes:
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"         # single public port
+    depends_on:      
+      - api      
+      - client

@@ -5,7 +5,7 @@ import PublicationDetailsPage from "./pages/PublicationDetailsPage";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/app">
       <Routes>
         <Route path="/" element={<PublicationsListPage />} />
         <Route path="/publications/:id" element={<PublicationDetailsPage />} />

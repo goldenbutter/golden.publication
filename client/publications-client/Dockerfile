@@ -12,8 +12,16 @@ RUN npm run build
 
 # -------- Serve with Nginx --------
 FROM nginx:alpine AS final
+WORKDIR /usr/share/nginx/html
+
 # Copy built static files to Nginx default directory
 COPY --from=build /app/dist /usr/share/nginx/html
+
+
+# Replace default nginx site config to enable SPA fallback
+RUN rm -f /etc/nginx/conf.d/default.conf
+COPY ./nginx-client.conf /etc/nginx/conf.d/default.conf
+
 
 # Expose port 80 for Nginx
 EXPOSE 80
