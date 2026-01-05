@@ -1,6 +1,5 @@
 import type { PublicationsListResponse, PublicationDetails } from "./types";
 
-// Use your API base URL. If using HTTPS (7005), change accordingly.
 const API_BASE = "http://localhost:5031";
 
 export async function fetchPublications(params: {
@@ -8,8 +7,8 @@ export async function fetchPublications(params: {
   isbn?: string;
   pageNumber?: number;
   pageSize?: number;
-  sortBy?: string;  // e.g. "title,publication_type"
-  sortDir?: string; // "asc" | "desc"
+  sortBy?: string;  
+  sortDir?: string; 
 }): Promise<PublicationsListResponse> {
   const qs = new URLSearchParams();
 

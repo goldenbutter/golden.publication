@@ -25,6 +25,14 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IPublicationRepository>(sp =>
 {
     var env = sp.GetRequiredService<IHostEnvironment>();
+
+    var fromEnv = Environment.GetEnvironmentVariable("PUBLICATION_XML_FILE");
+    if (!string.IsNullOrWhiteSpace(fromEnv) && File.Exists(fromEnv))
+    {
+        Console.WriteLine($"[Startup] Using PUBLICATION_XML_FILE={fromEnv}");
+        return new XmlPublicationRepository(fromEnv);
+    }
+
     var solutionRoot = Path.GetFullPath(Path.Combine(env.ContentRootPath, ".."));
     var xmlPath = Path.Combine(solutionRoot, "src", "Microchip.Interview.Data", "Data", "publications.xml");
 

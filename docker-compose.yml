@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Microchip.Interview.Api/Dockerfile
+    image: publications-api:latest
+    container_name: publications_api
+    environment:
+      # Program.cs prefers PUBLICATION_XML_FILE if present (we set this in the API Dockerfile),
+      # so no need to pass here unless you want to override.
+      # PUBLICATION_XML_FILE: /app/Data/publications.xml
+      ASPNETCORE_URLS: http://+:8080
+    ports:
+      - "5031:8080"  # host:container
+
+  client:
+    build:
+      context: ./client/publications-client
+      dockerfile: Dockerfile
+    image: publications-client:latest
+    container_name: publications_client
+    ports:
+      - "5173:80"    # host:container (Nginx in the client image serves on :80)
+    depends_on:
+      - api
