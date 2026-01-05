@@ -15,9 +15,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(AllowClient, policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        
+policy.WithOrigins(
+                "http://localhost:5173",         // local testing in local
+                "http://65.2.32.167:5173"        // EC2 client
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+
     });
 });
 
