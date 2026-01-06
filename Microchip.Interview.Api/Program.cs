@@ -4,31 +4,30 @@ using Microchip.Interview.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Controllers & Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// ------------------ Conditional CORS (based on appsettings) ------------------
 
-
-// === CORS: allow the React dev server (http://localhost:5173) ===
-/*const string AllowClient = "AllowClient";
-builder.Services.AddCors(options =>
+var enableCors = builder.Configuration.GetValue<bool>("EnableCors");
+if (enableCors)
 {
-    options.AddPolicy(AllowClient, policy =>
-    {
-        
-policy.WithOrigins(
-                "http://localhost:5173",         // local testing in local
-                "http://65.2.32.167:5173"        // EC2 client
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+    var allowed = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
 
+    const string AllowClient = "AllowClient";
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(AllowClient, policy =>
+        {
+            policy.WithOrigins(allowed)
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
     });
-});
-*/
+}
+
 // === Registered XML-backed repository ===
 builder.Services.AddSingleton<IPublicationRepository>(sp =>
 {
@@ -54,14 +53,10 @@ builder.Services.AddSingleton<IPublicationRepository>(sp =>
 
 // Registered domain service
 builder.Services.AddScoped<PublicationService>();
-
 var app = builder.Build();
 
 // Swagger
 //app.UseSwagger();
-
-
-
 
 // Pipeline
 app.UseSwagger(c =>
@@ -76,11 +71,12 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";  // Serve Swagger at root
 });
 
-
 // === Enable CORS === not needed if reverse proxy enabled
-//app.UseCors(AllowClient);
+if (enableCors)
+{
+    app.UseCors("AllowClient");
+}
 
 //app.UseHttpsRedirection();
 app.MapControllers();
-
 app.Run();
