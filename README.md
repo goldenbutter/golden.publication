@@ -54,7 +54,7 @@ This repo supports:
 
 ```
 microchip.interview/
-├─ Microchip.Interview.Api/                 # ASP.NET Web API
+├─ Microchip.Interview.Api/                  # ASP.NET Web API
 │  ├─ Program.cs
 │  ├─ appsettings.json
 │  ├─ appsettings.Development.json
@@ -64,19 +64,19 @@ microchip.interview/
 │  └─ Microchip.Interview.Data/
 │     └─ Data/publications.xml
 ├─ client/
-│  └─ publications-client/                  # React (Vite + TS)
+│  └─ publications-client/                   # React (Vite + TS)
 │     ├─ src/
 │     │  ├─ api/client.ts
 │     │  ├─ api/types.ts
 │     │  ├─ pages/...
 │     │  └─ components/...
-│     ├─ vite.config.ts        # only if serving under /app
+│     ├─ vite.config.ts                      # only if serving under /app
 │     ├─ nginx-client.conf
 │     ├─ Dockerfile
 │     ├─ .env.development
 │     └─ .env.production
 ├─ reverse-proxy/
-│  └─ nginx.conf                            # Nginx routing (single port)
+│  └─ nginx.conf                             # Nginx routing (single port)
 ├─ docker-compose.yml
 └─ README.md
 ```
@@ -84,7 +84,7 @@ microchip.interview/
 ### Prerequisites
 
 - **Node.js** (LTS) & **npm** (for local client dev)
-- **.NET SDK** compatible with net**10.0**
+- **.NET SDK** compatible with dot net**10.0**
 - **Docker** & **Docker Compose**
 - **PowerShell** / **Bash** for commands
 
@@ -242,3 +242,28 @@ VITE_API_BASE=http://localhost:5031
   - JSON → http://<host>/swagger/v1/swagger.json
 
 Controller route is **lower‑case** [Route("publications")], matching Nginx’s case‑sensitive location /publications.
+
+
+### Screenshots
+
+**SINGLE-port testing**
+
+- SPA homepage (Frontend) --> Localhost (testing)
+
+assets/screenshots/spa-home-localhost.png
+
+- SPA homepage (Frontend) --> EC2 instance (PROD)
+
+- Swagger UI (Backend) -->  Localhost (testing)
+
+assets/screenshots/swagger-ui-localhost.png
+
+- Swagger UI (Backend) -->  EC2 instance (PROD)
+
+- Publication JSON data
+
+assets/screenshots/publication-json-localhost.png
+
+
+
+**DOUBLE-port testing**
