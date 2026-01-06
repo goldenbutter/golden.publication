@@ -29,7 +29,7 @@ This repo supports:
 - #ec2--singleport-deployment
 - #optional--local-twopot-dev-cors-on
 - #routes-summary
-
+- #screenshots
 
 ### Architecture
 
