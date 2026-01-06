@@ -28,10 +28,7 @@ This repo supports:
 - #local--singleport-recommended
 - #ec2--singleport-deployment
 - #optional--local-twopot-dev-cors-on
-- #docker-standalone-if-needed
 - #routes-summary
-- #troubleshooting
-- #notes--best-practices
 
 
 ### Architecture
@@ -51,6 +48,37 @@ This repo supports:
      - SPA → / (or /app/ depending on your choice)
     - API → /publications
     - Swagger → /swagger/
+
+
+### Repo Structure
+
+microchip.interview/
+├─ Microchip.Interview.Api/                 # ASP.NET Web API
+│  ├─ Program.cs
+│  ├─ appsettings.json
+│  ├─ appsettings.Development.json
+│  ├─ Dockerfile
+│  └─ Properties/launchSettings.json
+├─ src/
+│  └─ Microchip.Interview.Data/
+│     └─ Data/publications.xml
+├─ client/
+│  └─ publications-client/                  # React (Vite + TS)
+│     ├─ src/
+│     │  ├─ api/client.ts
+│     │  ├─ api/types.ts
+│     │  ├─ pages/...
+│     │  └─ components/...
+│     ├─ vite.config.ts        # only if serving under /app
+│     ├─ nginx-client.conf
+│     ├─ Dockerfile
+│     ├─ .env.development
+│     └─ .env.production
+├─ reverse-proxy/
+│  └─ nginx.conf                            # Nginx routing (single port)
+├─ docker-compose.yml
+└─ README.md
+
 
 ### Prerequisites
 
