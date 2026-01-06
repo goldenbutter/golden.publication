@@ -17,4 +17,9 @@
     <ProjectReference Include="..\src\Microchip.Interview.Data\Microchip.Interview.Data.csproj" />
   </ItemGroup>
 
+  <!--<ItemGroup>
+    <EmbeddedResource Include="Swagger\index.html" />
+  </ItemGroup> -->
+
+
 </Project>

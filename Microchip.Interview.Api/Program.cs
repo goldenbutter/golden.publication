@@ -55,6 +55,17 @@ builder.Services.AddSingleton<IPublicationRepository>(sp =>
 builder.Services.AddScoped<PublicationService>();
 var app = builder.Build();
 
+// TEMP: list embedded resources once to verify the name
+foreach (var r in typeof(Program).Assembly.GetManifestResourceNames())
+{
+    Console.WriteLine($"[SwaggerResource] {r}");
+}
+// You can delete this loop after confirming the name.
+
+// Serve static files from wwwroot so Swagger can load /swagger-ui/custom.css & custom.js
+app.UseStaticFiles();
+
+
 // Swagger
 //app.UseSwagger();
 
@@ -65,13 +76,26 @@ app.UseSwagger(c =>
     c.RouteTemplate = "swagger/{documentName}/swagger.json";
 });
 
+
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Publications API v1");
-    c.RoutePrefix = "swagger";  // Serve Swagger at root
+    c.RoutePrefix = "swagger";
+
+    //c.DocumentTitle = "Publications API – Swagger";
+    //c.ConfigObject.DocExpansion = Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None;
+
+    // Optional: keep your injected assets
+    //c.InjectStylesheet("/swagger/custom.css");
+    //c.InjectJavascript("/swagger/custom.js");
+
+    // IMPORTANT: resource name = {AssemblyDefaultNamespace}.Swagger.index.html
+    //c.IndexStream = () => typeof(Program).Assembly
+    //    .GetManifestResourceStream("Microchip.Interview.Api.Swagger.index.html");
 });
 
-// === Enable CORS === not needed if reverse proxy enabled
+
+// === Enable CORS === TOGGLED with reverse proxy setting ===
 if (enableCors)
 {
     app.UseCors("AllowClient");
@@ -80,3 +104,7 @@ if (enableCors)
 //app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
+
+
+
+
