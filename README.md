@@ -1,146 +1,215 @@
-# Overview
+### Publications – API & React SPA
+A small full‑stack demo with:
 
-Thank you for your interest in joining the engineering team at **Microchip Technology Inc.** Microchip is committed to making innovative design easier through total system solutions that address critical challenges at the intersection of emerging technologies and durable end markets. Our easy-to-use development tools and comprehensive product portfolio support customers throughout the design process, from concept to completion.
+- **ASP.NET Web API** (reads publications.xml, search/sort/pagination, details)
+- **React (Vite + TypeScript)** SPA frontend
+- **Docker / Docker Compose**
+- **Nginx reverse proxy** for **single‑port deployment** (SPA + API + Swagger via one origin)
 
-As part of a collaborative development culture, you'll work closely with engineers across disciplines to design, develop, test, deploy, and support reliable solutions for our global customers. We believe the people closest to the work are in the best position to shape how that work should be done, and that requires a commitment to engineering excellence, continuous improvement, craftsmanship, and teamwork.
+This repo supports:
 
-This coding exercise is part of our interview process. It is not intended to trick you or to test for obscure knowledge; rather, it helps us understand how you think about design, structure your code, and solve problems. There is no single 'right' answer – we value clarity, maintainability, and your ability to communicate engineering intent.
+1.  **Primary: Single‑port (reverse proxy)**
+    - Everything served on **port 80** (local & EC2)
+    - No CORS needed (same origin)
+2.  **Optional: Two‑port dev (local only)**
+     - React dev server on **5173**
+     - API on **5031**
+     - CORS enabled **only** in Development via **appsettings.Development.json**
 
-We respect the time investment it takes to apply and to complete an exercise like this. While you should feel free to complete it in your own style, most candidates spend about **one to two hours** on the core requirements.
 
----
 
-## Your Submission
 
-Your task is to build the foundation of a **Publications Management System** using a small dataset provided in XML format.
+### Table of Contents
 
-The system revolves around *publications* and their *versions*. A publication may represent documents commonly used across Microchip's ecosystem, such as datasheets, user manuals, or reference guides.
+- #architecture
+- #repo-structure
+- #prerequisites
+- #environment-variables
+- #local--singleport-recommended
+- #ec2--singleport-deployment
+- #optional--local-twopot-dev-cors-on
+- #docker-standalone-if-needed
+- #routes-summary
+- #troubleshooting
+- #notes--best-practices
 
----
 
-## 1. Create a .NET Web API
+### Architecture
 
-Build a **.NET Web API** that exposes publication data as **JSON**. The XML file represents a simplified version of data you might retrieve from a product documentation or content storage system.
+- **API (ASP.NET):**
+  - Endpoints:
+    - GET /publications — list, search, sort, paginate
+    - GET /publications/{id} — details + versions
+  - Swagger UI at /swagger/ (JSON at /swagger/v1/swagger.json)
+  - Reads publications.xml (copied into image at /app/Data/publications.xml via Dockerfile)
+- **Client (React + Vite + TypeScript):**
+  - SPA for listing/searching publications and viewing details
+  - API base configured via Vite env (VITE_API_BASE)
+- **Reverse proxy (Nginx):**
+  - One public port (**80**)
+  - Path routing:
+     - SPA → / (or /app/ depending on your choice)
+    - API → /publications
+    - Swagger → /swagger/
 
-Your Web API should support the following features:
+### Prerequisites
 
----
+- **Node.js** (LTS) & **npm** (for local client dev)
+- **.NET SDK** compatible with net**10.0**
+- **Docker** & **Docker Compose**
+- **PowerShell** / **Bash** for commands
 
-### **A. List publications (paged)**
 
-- Return a paginated list of publications (default: **10 per page**).
-- Each listed item should include:
-  - `id`
-  - `publication_type`
-  - `title`
-  - `isbn`
-- Allow the client to request:
-  - Custom page number  
-  - Custom page size
+### Environment Variables
 
----
+### Client (Vite)
 
-### **B. Sorting**
+- client/publications-client/.env.development (two‑port dev)
 
-Allow sorting by one or more of:
+`VITE_API_BASE=http://localhost:5031`
 
-- `title`
-- `publication_type`
-- `isbn`
+- client/publications-client/.env.production (single‑port reverse proxy)
 
-Sorting direction (ascending / descending) should be controlled via query parameters.
+`VITE_API_BASE=http://<host>     # e.g., http://localhost or http://<ec2-ip>`
 
----
+If you serve SPA under /app, ensure:
 
-### **C. Searching / Filtering**
+- vite.config.ts → base: '/app/'
+- React Router → basename="/app"
+- Client Nginx fallback → try_files $uri /index.html;
 
-Support searching by partial:
+### API (ASP.NET) – Conditional CORS
+Microchip.Interview.Api/appsettings.json (**Production** / default – CORS **OFF**):
 
-- `title`
-- `isbn`
-
-Example query:
 
 ```
-/publications?title=controller&isbn=978
+{
+  "Logging": { "LogLevel": { "Default": "Information", "Microsoft.AspNetCore": "Warning" } },
+  "AllowedHosts": "*",
+  "EnableCors": false,
+  "AllowedOrigins": []
+}
 ```
 
----
+Microchip.Interview.Api/appsettings.Development.json (**Development** – CORS **ON** for two‑port dev):
 
-### **D. Publication details with versions**
+```
+{
+  "Logging": { "LogLevel": { "Default": "Debug", "Microsoft.AspNetCore": "Information" } },
+  "AllowedHosts": "*",
+  "EnableCors": true,
+  "AllowedOrigins": [ "http://localhost:5173" ]
+}
+```
 
-Create an endpoint that retrieves a **single publication** by its `id`.
+### Local – Single‑port (Recommended)
 
-The returned item should include **all versions**, each containing:
+Run the full stack via Docker Compose (production‑like, one port).
 
-- `id`
-- `publication_guid`
-- `version` (e.g., `1`, `1.1`, `2.3`)
-- `language`
-- `cover_title`
 
----
+```
+docker compose down --volumes --remove-orphans
+docker compose build --no-cache
+docker compose up -d
+```
 
-### **E. Optional Enhancements (not required)**
+**Open:**
 
-Optional if you want to demonstrate additional engineering style:
+- SPA (choose your path):
+  - http://localhost/ or
+  - http://localhost/app/ (if you deployed under /app)
+- API: http://localhost/publications
+- Swagger UI: http://localhost/swagger/
+- Swagger JSON: http://localhost/swagger/v1/swagger.json
 
-- `/publications/{id}/versions` endpoint
-- Global error handling
-- Caching of parsed XML
-- Dependency Injection for repository services
-- Logging
-- Additional unit tests
+If SPA is under /app, always use the **trailing slash**: /app/.
 
----
+### EC2 – Single‑port Deployment
 
-## 2. (Optional) Client-Side Application
+1. **Security Group:** allow inbound **80/tcp** (HTTP) and **22/tcp** (SSH from your IP).
+2. **SSH & pull:**
 
-You may also create a **client-side application** using Angular, React, Vue, or another modern framework.
+```
+ssh -i your-key.pem ec2-user@<EC2_PUBLIC_IP>
+cd ~/microchip-interview-private
+git pull origin main
+```
 
-If implemented, your client app may:
+3. **Client production env:**
 
-- Display a paginated list of publications (10 per page)
-- Support sorting
-- Display all publication versions
-- Support search by partial `title` or `isbn`
+```
+echo "VITE_API_BASE=http://<EC2_PUBLIC_IP>" > client/publications-client/.env.production
+```
+4. **Build & run:**
 
-This is optional.
+```
+docker compose down --volumes --remove-orphans
+docker compose build --no-cache
+docker compose up -d
+```
+5. **Test:**
+   - SPA: http://<EC2_PUBLIC_IP>/ (or /app/)
+   - API: http://<EC2_PUBLIC_IP>/publications
+   - Swagger: http://<EC2_PUBLIC_IP>/swagger
 
----
+**Ops shortcuts:**
 
-## What's Included in This Repository
+```
+# Update code
+git pull origin main
 
-- A **dummy XML data file** (`publications.xml`)
-- A basic **XML-backed repository class**
-- Unit tests validating repository behavior
+# Rebuild only API
+docker compose build --no-cache api && docker compose up -d api
 
-You may use or modify these components as you see fit.
+# Rebuild only client (after .env.production / vite changes)
+docker compose build --no-cache client && docker compose up -d client
 
----
+# Logs
+docker compose logs -f reverse-proxy
+docker compose logs -f api
+docker compose logs -f client
 
-## Getting Started
+```
 
-1. Clone this repository.
-2. Create a submission branch:
-   ```
-   submission/<your-name-or-id>
-   ```
-   Examples:
-   - `submission/01dec2025`
-   - `submission/jane-doe`
-   - `submission/publications-api`
-3. Add your solution to this branch.
+### Optional – Local Two‑port Dev (CORS ON)
 
----
+For fast iteration with HMR on Vite.
 
-## Submitting Your Work
+1. **Run API in Development (CORS ON via appsettings.Development.json):**
 
-You may submit your work by **zipping the repository** and sending the archive or link via your HR recruiter.
+```
+$env:ASPNETCORE_ENVIRONMENT = "Development"
+dotnet run --project Microchip.Interview.Api/Microchip.Interview.Api.csproj
+# http://localhost:5031 (Swagger at /swagger)
+```
 
-Coordinate with your HR representative if another method is preferred.
+2. **Run client dev:**
 
----
+```
+cd client/publications-client
+npm install
+npm run dev
+# http://localhost:5173
+```
 
-Thank you again for your interest in **Microchip Technology Inc.**  
-We look forward to reviewing your solution and discussing your approach!
+3. **Client dev env:**
+
+```
+VITE_API_BASE=http://localhost:5031
+```
+
+**Expected:** SPA calls API with no CORS errors (Development env enables CORS).
+**Note:** Stop the API with Ctrl+C—it runs in the foreground. Use a second terminal for npm run dev.
+
+### Routes Summary
+
+- **SPA:**
+   - http://<host>/ or http://<host>/app/ (if sub‑path deployment)
+- **API:**
+  - GET http://<host>/publications
+  - GET http://<host>/publications/{id}
+- **Swagger:**
+  - UI → http://<host>/swagger/
+  - JSON → http://<host>/swagger/v1/swagger.json
+
+Controller route is **lower‑case** [Route("publications")], matching Nginx’s case‑sensitive location /publications.
