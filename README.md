@@ -52,6 +52,7 @@ This repo supports:
 
 ### Repo Structure
 
+```
 microchip.interview/
 ├─ Microchip.Interview.Api/                 # ASP.NET Web API
 │  ├─ Program.cs
@@ -78,7 +79,7 @@ microchip.interview/
 │  └─ nginx.conf                            # Nginx routing (single port)
 ├─ docker-compose.yml
 └─ README.md
-
+```
 
 ### Prerequisites
 
