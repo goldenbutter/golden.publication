@@ -5,7 +5,8 @@ using Microchip.Interview.Api.Domain;
 namespace Microchip.Interview.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+//    [Route("[controller]")]
+    [Route("publications")] 
     public sealed class PublicationsController : ControllerBase
     {
         private readonly PublicationService _service;
