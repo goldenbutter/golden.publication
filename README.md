@@ -30,6 +30,7 @@ This repo supports:
 - #optional--local-twopot-dev-cors-on
 - #routes-summary
 - #screenshots
+- #jenkins
 
 ### Architecture
 
@@ -288,3 +289,34 @@ Controller route is **lower‑case** [Route("publications")], matching Nginx’s
 
 <img width="1800" height="650" alt="swagger-ui-localhost-5031" src="https://github.com/user-attachments/assets/cca07372-6320-4918-9a91-16d42e38f5f8" />
 
+
+### Jenkins
+
+##  CI/CD Pipeline with Jenkins
+
+This project includes a fully automated CI/CD pipeline using Jenkins, integrated with GitHub via webhooks.
+
+###  Jenkins Setup
+- Jenkins master hosted on EC2
+- Node.js 20, .NET SDK 10, and Docker installed
+- SSH-based deployment to a separate EC2 instance
+
+###  Pipeline Stages
+1. **Checkout SCM** – Pulls latest code from GitHub
+2. **Build React Frontend** – Runs `npm ci` and `npm run build`
+3. **Build .NET Backend** – Restores and publishes the .NET API
+4. **Build Docker Images** – Builds containers for frontend, backend, and reverse proxy
+5. **Deploy to EC2** – SSH into deployment server and runs Docker Compose
+6. **Restart Services** – Restarts running containers via `docker-compose restart`
+
+###  GitHub Webhook Integration
+- Webhook triggers Jenkins build on every push
+- No manual intervention required
+- Instant deployment to live EC2 environment
+
+###  Live Deployment
+- React frontend served via Nginx reverse proxy
+- .NET backend exposed via API container
+- All services orchestrated using Docker Compose
+
+---
