@@ -87,7 +87,7 @@ pipeline {
 
         stage('Restart Services') {
         steps {
-            echo "🔄 Restarting Docker services on EC2..."
+            echo "Restarting Docker services on EC2..."
             sshagent([SSH_KEY]) {
                 sh '''
                 ssh -o StrictHostKeyChecking=no $EC2_HOST "
