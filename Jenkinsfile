@@ -10,6 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
+                echo "Checking out code from GitHub..."
                 git branch: 'main',
                     credentialsId: 'github-token',
                     url: 'https://github.com/goldenbutter/microchip-interview-private.git'
@@ -18,10 +19,12 @@ pipeline {
 
         stage('Build React Frontend') {
             steps {
+                echo "Building React frontend..."
                 dir('client/publications-client') {
                     sh '''
                         echo "Installing frontend dependencies..."
                         npm ci
+
                         echo "Building frontend..."
                         npm run build
                     '''
@@ -31,11 +34,12 @@ pipeline {
 
         stage('Build .NET Backend') {
             steps {
+                echo "Building .NET backend..."
                 sh '''
                     echo "Restoring .NET dependencies..."
                     dotnet restore Microchip.Interview.Api/Microchip.Interview.Api.csproj
 
-                    echo "Building .NET API..."
+                    echo "Publishing .NET API..."
                     dotnet publish Microchip.Interview.Api/Microchip.Interview.Api.csproj \
                         -c Release -o Microchip.Interview.Api/publish
                 '''
@@ -44,6 +48,7 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
+                echo "Building Docker images..."
                 sh '''
                     echo "Building API Docker image..."
                     docker build -t publications-api:latest \
@@ -59,15 +64,21 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
+                echo "Deploying to EC2 server..."
                 sshagent([SSH_KEY]) {
                     sh '''
-                        echo "Deploying to EC2..."
-
                         ssh -o StrictHostKeyChecking=no $EC2_HOST "
-                            cd /var/www/microchip-app &&
-                            docker compose down --volumes --remove-orphans &&
-                            docker compose build --no-cache &&
-                            docker compose up -d
+                            echo 'Navigating to project directory...'
+                            cd /home/ubuntu/project/microchip-interview-private &&
+
+                            echo 'Stopping existing containers...'
+                            docker-compose down --volumes --remove-orphans &&
+
+                            echo 'Rebuilding containers...'
+                            docker-compose build --no-cache &&
+
+                            echo 'Starting containers...'
+                            docker-compose up -d
                         "
                     '''
                 }
@@ -76,14 +87,13 @@ pipeline {
 
         stage('Restart Services') {
             steps {
+                echo "Restarting Docker services on EC2..."
                 sshagent([SSH_KEY]) {
                     sh '''
-                        echo "Restarting Docker services on EC2..."
-
                         ssh -o StrictHostKeyChecking=no $EC2_HOST "
-                            docker compose restart api &&
-                            docker compose restart client &&
-                            docker compose restart reverse-proxy
+                            docker-compose restart api &&
+                            docker-compose restart client &&
+                            docker-compose restart reverse-proxy
                         "
                     '''
                 }
@@ -93,10 +103,10 @@ pipeline {
 
     post {
         success {
-            echo "Deployment completed successfully!"
+            echo "🎉 Deployment completed successfully!"
         }
         failure {
-            echo "Deployment failed. Check logs."
+            echo "❌ Deployment failed. Check logs."
         }
     }
 }
