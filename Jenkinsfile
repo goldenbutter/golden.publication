@@ -86,16 +86,17 @@ pipeline {
         }
 
         stage('Restart Services') {
-            steps {
-                echo "Restarting Docker services on EC2..."
-                sshagent([SSH_KEY]) {
-                    sh '''
-                        ssh -o StrictHostKeyChecking=no $EC2_HOST "
-                            docker-compose restart api &&
-                            docker-compose restart client &&
-                            docker-compose restart reverse-proxy
-                        "
-                    '''
+        steps {
+            echo "🔄 Restarting Docker services on EC2..."
+            sshagent([SSH_KEY]) {
+                sh '''
+                ssh -o StrictHostKeyChecking=no $EC2_HOST "
+                    cd /home/ubuntu/project/microchip-interview-private &&
+                    docker-compose restart api &&
+                    docker-compose restart client &&
+                    docker-compose restart reverse-proxy
+                    "
+                '''
                 }
             }
         }
