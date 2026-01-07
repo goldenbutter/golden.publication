@@ -5,6 +5,7 @@ A small full‑stack demo with:
 - **React (Vite + TypeScript)** SPA frontend
 - **Docker / Docker Compose**
 - **Nginx reverse proxy** for **single‑port deployment** (SPA + API + Swagger via one origin)
+- **Jenkins CI/CD Integration** with **GitHub Webhook Integration**
 
 This repo supports:
 
@@ -25,12 +26,12 @@ This repo supports:
 - #repo-structure
 - #prerequisites
 - #environment-variables
-- #local--singleport-recommended
-- #ec2--singleport-deployment
+- #local--singleport-recommended (reverse proxy)
+- #ec2--singleport-deployment (with docker)
 - #optional--local-twopot-dev-cors-on
 - #routes-summary
 - #screenshots
-- #jenkins
+- #jenkins-ci-cd-github-webhook
 
 ### Architecture
 
@@ -132,7 +133,7 @@ Microchip.Interview.Api/appsettings.Development.json (**Development** – CORS *
 }
 ```
 
-### Local – Single‑port (Recommended)
+### Local – Single‑port via reverse proxy (Recommended) 
 
 Run the full stack via Docker Compose (production‑like, one port).
 
@@ -154,7 +155,7 @@ docker compose up -d
 
 If SPA is under /app, always use the **trailing slash**: /app/.
 
-### EC2 – Single‑port Deployment
+### EC2 – Single‑port Deployment with Docker / Docker compose
 
 1. **Security Group:** allow inbound **80/tcp** (HTTP) and **22/tcp** (SSH from your IP).
 2. **SSH & pull:**
