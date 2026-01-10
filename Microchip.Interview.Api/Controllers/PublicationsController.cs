@@ -46,5 +46,20 @@ namespace Microchip.Interview.Api.Controllers
 
             return Ok(PublicationMappers.ToDetails(p));
         }
+
+        // GET /publications/{id}/versions
+        [HttpGet("{id}/versions")]
+        public async Task<IActionResult> GetVersions(string id)
+        {
+            var p = await _service.GetDetailsAsync(id);
+            if (p is null)
+                return NotFound();
+
+            var versions = p.Versions
+                .Select(PublicationMappers.ToVersion)
+                .ToList();
+            
+            return Ok(p.Versions.Select(PublicationMappers.ToVersion).ToList());
+        }
     }
 }

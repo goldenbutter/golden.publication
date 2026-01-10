@@ -28,5 +28,13 @@ namespace Microchip.Interview.Api.Api
                 CoverTitle = v.CoverTitle
             }).ToList()
         };
+        public static PublicationVersionDto ToVersion(PublicationVersion v) => new()
+        {
+            Id = v.Id.ToString(),
+            PublicationGuid = v.PublicationGuid.ToString(),
+            Version = v.Version,
+            Language = v.Language,
+            CoverTitle = v.CoverTitle
+        };
     }
 }

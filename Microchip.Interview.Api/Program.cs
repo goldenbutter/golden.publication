@@ -55,16 +55,6 @@ builder.Services.AddSingleton<IPublicationRepository>(sp =>
 builder.Services.AddScoped<PublicationService>();
 var app = builder.Build();
 
-// TEMP: list embedded resources once to verify the name
-foreach (var r in typeof(Program).Assembly.GetManifestResourceNames())
-{
-    Console.WriteLine($"[SwaggerResource] {r}");
-}
-// You can delete this loop after confirming the name.
-
-// Serve static files from wwwroot so Swagger can load /swagger-ui/custom.css & custom.js
-app.UseStaticFiles();
-
 
 // Swagger
 //app.UseSwagger();
