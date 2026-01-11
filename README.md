@@ -83,7 +83,7 @@ Supports:
                         └───────────────────────────┘
 ```
 
-<img width="1200" height="600" alt="architecture-diagram" src="https://github.com/user-attachments/assets/2e7b02ff-4a98-4141-ad37-5595d70dfe87" />
+<img width="1200" height="600" alt="architecture-diagram" src="https://github.com/user-attachments/assets/c8182a50-3eb2-4660-aecb-41085121d55d" />
 
 
 ## Repo Structure
