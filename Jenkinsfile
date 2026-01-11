@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        EC2_HOST = "ubuntu@65.2.147.158"
+        EC2_HOST = "ubuntu@13.205.157.132"
         SSH_KEY = "a6637633-5bab-4a95-a43a-0bf8d077bb35"
     }
 
@@ -10,93 +10,36 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo "Checking out code from GitHub..."
-                git branch: 'main',
+                echo "Checking out code..."
+                git branch: 'dev',
                     credentialsId: 'github-token',
                     url: 'https://github.com/goldenbutter/microchip-interview-private.git'
             }
         }
 
-        stage('Build React Frontend') {
+        stage('Copy Code to EC2') {
             steps {
-                echo "Building React frontend..."
-                dir('client/publications-client') {
+                echo "Copying code to EC2..."
+                sshagent([SSH_KEY]) {
                     sh '''
-                        echo "Installing frontend dependencies..."
-                        npm ci
-
-                        echo "Building frontend..."
-                        npm run build
+                        rsync -avz --delete \
+                        ./ $EC2_HOST:/home/ubuntu/project/microchip-interview-private/
                     '''
                 }
             }
         }
 
-        stage('Build .NET Backend') {
+        stage('Deploy on EC2') {
             steps {
-                echo "Building .NET backend..."
-                sh '''
-                    echo "Restoring .NET dependencies..."
-                    dotnet restore Microchip.Interview.Api/Microchip.Interview.Api.csproj
-
-                    echo "Publishing .NET API..."
-                    dotnet publish Microchip.Interview.Api/Microchip.Interview.Api.csproj \
-                        -c Release -o Microchip.Interview.Api/publish
-                '''
-            }
-        }
-
-        stage('Build Docker Images') {
-            steps {
-                echo "Building Docker images..."
-                sh '''
-                    echo "Building API Docker image..."
-                    docker build -t publications-api:latest \
-                        -f Microchip.Interview.Api/Dockerfile .
-
-                    echo "Building Client Docker image..."
-                    docker build -t publications-client:latest \
-                        -f client/publications-client/Dockerfile \
-                        client/publications-client
-                '''
-            }
-        }
-
-        stage('Deploy to EC2') {
-            steps {
-                echo "Deploying to EC2 server..."
+                echo "Deploying on EC2..."
                 sshagent([SSH_KEY]) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no $EC2_HOST "
-                            echo 'Navigating to project directory...'
                             cd /home/ubuntu/project/microchip-interview-private &&
-
-                            echo 'Stopping existing containers...'
-                            docker-compose down --volumes --remove-orphans &&
-
-                            echo 'Rebuilding containers...'
-                            docker-compose build --no-cache &&
-
-                            echo 'Starting containers...'
-                            docker-compose up -d
+                            docker-compose down &&
+                            docker-compose up -d --build
                         "
                     '''
-                }
-            }
-        }
-
-        stage('Restart Services') {
-        steps {
-            echo "Restarting Docker services on EC2..."
-            sshagent([SSH_KEY]) {
-                sh '''
-                ssh -o StrictHostKeyChecking=no $EC2_HOST "
-                    cd /home/ubuntu/project/microchip-interview-private &&
-                    docker-compose restart api &&
-                    docker-compose restart client &&
-                    docker-compose restart reverse-proxy
-                    "
-                '''
                 }
             }
         }
