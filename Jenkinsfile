@@ -20,7 +20,7 @@ pipeline {
         stage('Copy Code to EC2') {
             steps {
                 echo "Copying code to EC2..."
-                sshagent([SSH_KEY]) {
+                sshagent([env.SSH_KEY]) {
                     sh '''
                         rsync -avz --delete \
                         ./ $EC2_HOST:/home/ubuntu/project/microchip-interview-private/
