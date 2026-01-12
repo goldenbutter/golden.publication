@@ -78,8 +78,8 @@ export default function PublicationsListPage() {
                 <th align="left">Title</th>
                 <th align="left">Type</th>
                 <th align="left">ISBN</th>
-                <th align="left">Actions</th>
                 <th align="left">Description</th>
+                <th align="left">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -89,7 +89,6 @@ export default function PublicationsListPage() {
                   <td>{p.publication_type}</td>
                   <td>{p.isbn}</td>
                   <td>{p.description}</td>
-
                   <td>
                     <Link to={`/publications/${p.id}`}>View details</Link>
                   </td>

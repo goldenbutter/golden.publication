@@ -3,12 +3,14 @@ import { useState } from "react";
 type Props = {
   initialTitle?: string;
   initialIsbn?: string;
-  onSearch: (q: { title?: string; isbn?: string }) => void;
+  initialDescription?: string;
+  onSearch: (q: { title?: string; isbn?: string; description?: string }) => void;
 };
 
-export default function SearchBar({ initialTitle, initialIsbn, onSearch }: Props) {
+export default function SearchBar({ initialTitle, initialIsbn, initialDescription, onSearch }: Props) {
   const [title, setTitle] = useState(initialTitle ?? "");
   const [isbn, setIsbn] = useState(initialIsbn ?? "");
+  const [description, setDescription] = useState(initialIsbn ?? "");
 
   return (
     <div style={{ display: "flex", gap: 12, marginBottom: 12 }}>
@@ -24,14 +26,21 @@ export default function SearchBar({ initialTitle, initialIsbn, onSearch }: Props
         onChange={(e) => setIsbn(e.target.value)}
         style={{ padding: 8, width: 180 }}
       />
-      <button onClick={() => onSearch({ title, isbn })} style={{ padding: "8px 14px" }}>
+      <input
+        placeholder="Search description..."
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        style={{ padding: 8, width: 260 }}
+      />
+
+      <button onClick={() => onSearch({ title, isbn, description })} style={{ padding: "8px 14px" }}>
         Search
       </button>
       <button
         onClick={() => {
           setTitle("");
           setIsbn("");
-          onSearch({ title: "", isbn: "" });
+          onSearch({ title: "", isbn: "", description: "" });
         }}
         style={{ padding: "8px 14px" }}
       >

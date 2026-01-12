@@ -16,7 +16,8 @@ export default function SortControls({ sortBy, sortDir, onChange }: Props) {
         <option value="title">Title</option>
         <option value="publication_type">Publication Type</option>
         <option value="isbn">ISBN</option>
-        <option value="title,publication_type">Title, Publication Type</option>
+        <option value="description">Description</option>
+        <option value="title,publication_type,description">Title, Publication Type, Description</option>
       </select>
       <select
         value={sortDir}
