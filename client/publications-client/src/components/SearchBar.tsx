@@ -10,7 +10,7 @@ type Props = {
 export default function SearchBar({ initialTitle, initialIsbn, initialDescription, onSearch }: Props) {
   const [title, setTitle] = useState(initialTitle ?? "");
   const [isbn, setIsbn] = useState(initialIsbn ?? "");
-  const [description, setDescription] = useState(initialIsbn ?? "");
+  const [description, setDescription] = useState(initialDescription ?? "");
 
   return (
     <div style={{ display: "flex", gap: 12, marginBottom: 12 }}>
