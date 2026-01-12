@@ -18,6 +18,14 @@ public sealed class XmlPublicationRepository : IPublicationRepository
         var document = (PublicationsDocument)serializer.Deserialize(stream)!;
 
         _publications = document.Items ?? [];
+
+        // 🔥 DEBUG: Print all loaded publications 
+        Console.WriteLine("=== DEBUG: Loaded Publications ==="); 
+        foreach (var p in _publications) 
+        { 
+                Console.WriteLine($"Publication: ID={p.Id} | Title={p.Title}");
+        } 
+         Console.WriteLine("=== END DEBUG ===");
     }
 
     public Task<Publication?> SingleAsync(Guid id)
