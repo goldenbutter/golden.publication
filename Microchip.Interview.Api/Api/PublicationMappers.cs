@@ -10,7 +10,8 @@ namespace Microchip.Interview.Api.Api
             Id = p.Id.ToString(),
             PublicationType = p.PublicationType,
             Title = p.Title,
-            Isbn = p.Isbn
+            Isbn = p.Isbn,
+            Description = p.Description
         };
 
         public static PublicationDetailsDto ToDetails(Publication p) => new()
@@ -19,6 +20,7 @@ namespace Microchip.Interview.Api.Api
             PublicationType = p.PublicationType,
             Title = p.Title,
             Isbn = p.Isbn,
+            Description = p.Description,
             Versions = p.Versions.Select(v => new PublicationVersionDto
             {
                 Id = v.Id.ToString(),

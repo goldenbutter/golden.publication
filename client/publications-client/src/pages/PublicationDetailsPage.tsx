@@ -45,6 +45,7 @@ export default function PublicationDetailsPage() {
             <div><strong>Type:</strong> {data.publication_type}</div>
             <div><strong>ISBN:</strong> {data.isbn}</div>
             <div><strong>ID:</strong> {data.id}</div>
+            <div><strong>Description:</strong> {data.description}</div>
           </div>
 
           <h3>Versions</h3>

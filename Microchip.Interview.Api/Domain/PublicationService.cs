@@ -36,7 +36,13 @@ namespace Microchip.Interview.Api.Domain
                 all = all.Where(p => p.Isbn.Contains(i, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            // Sorting
+            // Searching: Description contains
+            if (!string.IsNullOrWhiteSpace(q.Description))
+            {
+                var d = q.Description.Trim();
+                all = all.Where(p => p.Description.Contains(d, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+                        // Sorting
             if (!string.IsNullOrWhiteSpace(q.SortBy))
             {
                 var fields = q.SortBy.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);

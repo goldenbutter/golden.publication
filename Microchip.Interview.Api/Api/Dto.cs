@@ -17,6 +17,9 @@ namespace Microchip.Interview.Api.Api
 
         [JsonPropertyName("isbn")]
         public string Isbn { get; set; } = default!;
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; } = default!;
     }
 
     // Details + versions
@@ -36,6 +39,9 @@ namespace Microchip.Interview.Api.Api
 
         [JsonPropertyName("versions")]
         public List<PublicationVersionDto> Versions { get; set; } = new();
+        
+        [JsonPropertyName("description")]
+        public string Description { get; set; } = default!;
     }
 
     public sealed class PublicationVersionDto

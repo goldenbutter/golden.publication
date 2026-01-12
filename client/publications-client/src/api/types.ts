@@ -3,6 +3,7 @@ export type PublicationListItem = {
   publication_type: string;
   title: string;
   isbn: string;
+  description: string;
 };
 
 export type PublicationVersion = {
@@ -18,6 +19,7 @@ export type PublicationDetails = {
   publication_type: string;
   title: string;
   isbn: string;
+  description: string;
   versions: PublicationVersion[];
 };
 

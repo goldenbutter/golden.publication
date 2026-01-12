@@ -7,6 +7,7 @@ namespace Microchip.Interview.Api.Api
         // Searching / filtering
         public string? Title { get; set; }
         public string? Isbn { get; set; }
+        public string? Description { get; set; }
 
         // Paging
         [Range(1, int.MaxValue)]
