@@ -12,6 +12,7 @@ export default function PublicationsListPage() {
 
   const [title, setTitle] = useState<string>("");
   const [isbn, setIsbn] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
 
   const [sortBy, setSortBy] = useState<string>("title");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
@@ -27,7 +28,7 @@ export default function PublicationsListPage() {
     setError(null);
     try {
       const data: PublicationsListResponse = await fetchPublications({
-        title, isbn, pageNumber, pageSize, sortBy, sortDir,
+        title, isbn, description, pageNumber, pageSize, sortBy, sortDir,
       });
       setItems(data.items);
       setTotal(data.total);
@@ -41,7 +42,7 @@ export default function PublicationsListPage() {
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title, isbn, pageNumber, pageSize, sortBy, sortDir]);
+  }, [title, isbn, description, pageNumber, pageSize, sortBy, sortDir]);
 
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: 16 }}>
@@ -50,9 +51,11 @@ export default function PublicationsListPage() {
       <SearchBar
         initialTitle={title}
         initialIsbn={isbn}
+        initialDescription={description}
         onSearch={(q) => {
           setTitle(q.title ?? "");
           setIsbn(q.isbn ?? "");
+          setDescription(q.description ?? "");
           setPageNumber(1);
         }}
       />

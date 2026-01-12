@@ -7,6 +7,7 @@ const API_BASE =
 function buildQuery(params: {
   title?: string;
   isbn?: string;
+  description?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;  
@@ -15,6 +16,7 @@ function buildQuery(params: {
   const qs = new URLSearchParams();
   if (params.title) qs.set("title", params.title);
   if (params.isbn) qs.set("isbn", params.isbn);
+  if (params.description) qs.set("description", params.description);
   qs.set("pageNumber", String(params.pageNumber ?? 1));
   qs.set("pageSize", String(params.pageSize ?? 10));
   if (params.sortBy) qs.set("sortBy", params.sortBy);
@@ -25,6 +27,7 @@ function buildQuery(params: {
 export async function fetchPublications(params: {
   title?: string;
   isbn?: string;
+  description?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;

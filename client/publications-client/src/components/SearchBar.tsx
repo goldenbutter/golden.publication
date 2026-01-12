@@ -40,6 +40,7 @@ export default function SearchBar({ initialTitle, initialIsbn, initialDescriptio
         onClick={() => {
           setTitle("");
           setIsbn("");
+          setDescription("");
           onSearch({ title: "", isbn: "", description: "" });
         }}
         style={{ padding: "8px 14px" }}

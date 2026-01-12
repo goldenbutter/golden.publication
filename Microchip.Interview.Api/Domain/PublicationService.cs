@@ -42,7 +42,7 @@ namespace Microchip.Interview.Api.Domain
                 var d = q.Description.Trim();
                 all = all.Where(p => p.Description.Contains(d, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-                        // Sorting
+            // Sorting
             if (!string.IsNullOrWhiteSpace(q.SortBy))
             {
                 var fields = q.SortBy.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -57,6 +57,7 @@ namespace Microchip.Interview.Api.Domain
                         "title" => p => p.Title,
                         "publication_type" => p => p.PublicationType,
                         "isbn" => p => p.Isbn,
+                        "description" => p => p.Description,
                         _ => p => p.Title
                     };
 
