@@ -83,7 +83,7 @@ Supports:
                         └───────────────────────────┘
 ```
 
-<img width="1200" height="600" alt="architecture-diagram" src="https://github.com/user-attachments/assets/c8182a50-3eb2-4660-aecb-41085121d55d" />
+<img width="1200" height="600" alt="architecture-diagram" src="https://github.com/user-attachments/assets/4e6a583d-45bd-4621-94c7-98d6592305a7" />
 
 
 ## Repo Structure
@@ -163,7 +163,7 @@ microchip.interview/
 
 ### `.env.production` (single‑port reverse proxy)
 
-`VITE_API_BASE=http://<host>`
+`VITE_API_BASE=""`
 
 If SPA is served under `/app`, update:
 - `vite.config.ts` → base: `/app/`
@@ -205,7 +205,7 @@ ssh -i your-key.pem ec2-user@<EC2_PUBLIC_IP> cd ~/microchip-interview-private gi
 
 ### 3. Set Client Production Environment
 
-echo `VITE_API_BASE=http://<EC2_PUBLIC_IP>` > client/publications-client/.env.production
+echo `VITE_API_BASE=http://""` > client/publications-client/.env.production
 
 ### 4. Build & Run
 
@@ -254,7 +254,7 @@ For fast local development with Vite HMR.
 
 ### 1. Run API in Development Mode
 
-`$env:ASPNETCORE_ENVIRONMENT = “Development”`
+`$env:ASPNETCORE_ENVIRONMENT = "Development"`
 
 ```
 dotnet run –project Microchip.Interview.Api/Microchip.Interview.Api.csproj
