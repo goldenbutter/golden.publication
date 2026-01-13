@@ -49,17 +49,21 @@ namespace Microchip.Interview.Api.Controllers
 
         // GET /publications/{id}/versions
         [HttpGet("{id}/versions")]
-        public async Task<IActionResult> GetVersions(Guid id)
+        public async Task<IActionResult> GetVersions(string id)
         {
-            var p = await _service.GetDetailsAsync(id.ToString());
-            if (p is null)
+            // Validate GUID manually
+            if (!Guid.TryParse(id, out var guid))
+                return BadRequest("Invalid GUID format.");
+
+            var publication = await _service.GetDetailsAsync(id);
+            if (publication is null)
                 return NotFound();
 
-            var versions = p.Versions
+            var versions = publication.Versions
                 .Select(PublicationMappers.ToVersion)
                 .ToList();
-            
-            return Ok(p.Versions);
+
+            return Ok(versions);
         }
     }
 }
