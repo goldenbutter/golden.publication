@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Microchip.Interview.Api.Api
+namespace Golden.Publication.Api
 {
     public sealed class PublicationQuery
     {

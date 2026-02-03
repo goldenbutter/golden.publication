@@ -1,6 +1,6 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 
-namespace Microchip.Interview.Data.Models;
+namespace Golden.Publication.Data.Models;
 
 public class PublicationVersion
 {

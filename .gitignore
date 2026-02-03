@@ -398,6 +398,27 @@ FodyWeavers.xsd
 *.msi
 *.msix
 *.msm
+
+# Client (Vite) build and env
+client/publications-client/node_modules/
+client/publications-client/dist/
+client/publications-client/.vite/
+client/publications-client/.env
+client/publications-client/.env.local
+client/publications-client/.env.*.local
+client/publications-client/.env.*.production
+client/publications-client/npm-debug.log*
+client/publications-client/*.log
+
+# Docker & compose overrides
+docker-compose.override.yml
+*.env
+!.env.example
+
+# Logs
+logs/
+*.log
+
 *.msp
 
 # JetBrains Rider

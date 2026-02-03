@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microchip.Interview.Api.Api;
-using Microchip.Interview.Data;
-using Microchip.Interview.Data.Models;
+using Golden.Publication.Api;
+using Golden.Publication.Data;
+// using Golden.Publication.Data.Models;
 
-namespace Microchip.Interview.Api.Domain
+namespace Golden.Publication.Api.Domain
 {
     public sealed class PublicationService
     {
@@ -17,7 +17,8 @@ namespace Microchip.Interview.Api.Domain
             _repo = repo;
         }
 
-        public async Task<(IReadOnlyList<Publication> Items, int Total)> SearchAsync(PublicationQuery q)
+        // Note the alias types below
+        public async Task<(IReadOnlyList<PublicationModel> Items, int Total)> SearchAsync(PublicationQuery q)
         {
             // Load all (no filter) then apply searching/sorting/paging here
             var all = await _repo.WhereAsync(p => true);
@@ -42,23 +43,24 @@ namespace Microchip.Interview.Api.Domain
                 var d = q.Description.Trim();
                 all = all.Where(p => p.Description.Contains(d, StringComparison.OrdinalIgnoreCase)).ToList();
             }
+
             // Sorting
             if (!string.IsNullOrWhiteSpace(q.SortBy))
             {
                 var fields = q.SortBy.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 var desc = q.SortDir.Equals("desc", StringComparison.OrdinalIgnoreCase);
 
-                IOrderedEnumerable<Publication>? ordered = null;
+                IOrderedEnumerable<PublicationModel>? ordered = null;
 
                 foreach (var f in fields)
                 {
-                    Func<Publication, object?> keySelector = f.ToLowerInvariant() switch
+                    Func<PublicationModel, object?> keySelector = f.ToLowerInvariant() switch
                     {
-                        "title" => p => p.Title,
-                        "publication_type" => p => p.PublicationType,
-                        "isbn" => p => p.Isbn,
-                        "description" => p => p.Description,
-                        _ => p => p.Title
+                        "title"             => p => p.Title,
+                        "publication_type"  => p => p.PublicationType,
+                        "isbn"              => p => p.Isbn,
+                        "description"       => p => p.Description,
+                        _                   => p => p.Title
                     };
 
                     ordered = ordered == null
@@ -79,13 +81,12 @@ namespace Microchip.Interview.Api.Domain
             return (page, total);
         }
 
-        public Task<Publication?> GetDetailsAsync(string id)
+        public Task<PublicationModel?> GetDetailsAsync(string id)
         {
             if (!Guid.TryParse(id, out var guid))
-                return Task.FromResult<Publication?>(null);
+                return Task.FromResult<PublicationModel?>(null);
 
             return _repo.SingleAsync(guid);
         }
     }
 }
-

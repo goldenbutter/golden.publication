@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Microchip.Interview.Data;
+namespace Golden.Publication.Data;
 
 public interface IRepository<T>
 {

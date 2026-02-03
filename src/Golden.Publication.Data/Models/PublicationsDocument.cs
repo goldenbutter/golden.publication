@@ -1,6 +1,6 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 
-namespace Microchip.Interview.Data.Models;
+namespace Golden.Publication.Data.Models;
 
 /// <summary>
 /// This class is for serialization purposes ONLY and should only be used for that reason

@@ -1,8 +1,7 @@
 import type { PublicationsListResponse, PublicationDetails } from "./types";
 
 // Read API base from Vite env at build time; fallback for local dev.
-const API_BASE =
-  (import.meta.env?.VITE_API_BASE as string | undefined) ?? "http://localhost:5031";
+const API_BASE = (import.meta.env?.VITE_API_BASE as string | undefined) ?? "http://localhost:5031";
 
 function buildQuery(params: {
   title?: string;

@@ -1,5 +1,5 @@
-using Microchip.Interview.Api.Domain;
-using Microchip.Interview.Data;
+using Golden.Publication.Api.Domain;
+using Golden.Publication.Data;
 //using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,7 +44,7 @@ builder.Services.AddSingleton<IPublicationRepository>(sp =>
 
     // Fallback for local
     var solutionRoot = Path.GetFullPath(Path.Combine(env.ContentRootPath, ".."));
-    var xmlPath = Path.Combine(solutionRoot, "src", "Microchip.Interview.Data", "Data", "publications.xml");
+    var xmlPath = Path.Combine(solutionRoot, "src", "Golden.Publication.Data", "Data", "publications.xml");
 
     Console.WriteLine($"[Startup] publications.xml path: {xmlPath}");
 
@@ -81,7 +81,7 @@ app.UseSwaggerUI(c =>
 
     // IMPORTANT: resource name = {AssemblyDefaultNamespace}.Swagger.index.html
     //c.IndexStream = () => typeof(Program).Assembly
-    //    .GetManifestResourceStream("Microchip.Interview.Api.Swagger.index.html");
+    //    .GetManifestResourceStream("Golden.Publication.Api.Swagger.index.html");
 });
 
 

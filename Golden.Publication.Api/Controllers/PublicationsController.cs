@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microchip.Interview.Api.Api;
-using Microchip.Interview.Api.Domain;
+using Golden.Publication.Api;
+using Golden.Publication.Api.Domain;
 
-namespace Microchip.Interview.Api.Controllers
+namespace Golden.Publication.Api.Controllers
 {
     [ApiController]
 //    [Route("[controller]")]

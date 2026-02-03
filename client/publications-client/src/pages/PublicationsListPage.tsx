@@ -46,8 +46,7 @@ export default function PublicationsListPage() {
 
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: 16 }}>
-      <h1>Publications</h1>
-
+	  <h1 style={{ color: "red" }}>🔥 GOLDEN PUBLICATIONS 🔥</h1>
       <SearchBar
         initialTitle={title}
         initialIsbn={isbn}

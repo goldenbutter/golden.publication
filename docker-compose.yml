@@ -1,4 +1,4 @@
-version: "3.9"
+#version: "3.9"
 
 services:
 
@@ -6,8 +6,8 @@ services:
     container_name: publications_api
     build:
       context: .
-      dockerfile: Microchip.Interview.Api/Dockerfile
-    image: publications-api:latest
+      dockerfile: Golden.Publication.Api/Dockerfile
+    image: golden-publications-api:latest
     expose:
       - "8080"
     environment:
@@ -21,7 +21,7 @@ services:
     build:
       context: ./client/publications-client
       dockerfile: Dockerfile
-    image: publications-client:latest
+    image: golden-publications-client:latest
     expose:
       - "80"
     depends_on:

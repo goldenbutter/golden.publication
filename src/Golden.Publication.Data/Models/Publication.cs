@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace Microchip.Interview.Data.Models;
+namespace Golden.Publication.Data.Models;
 
 public class Publication
 {

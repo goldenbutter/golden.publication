@@ -89,15 +89,15 @@ Supports:
 ## Repo Structure
 
 ```text
-microchip.interview/
-├─ Microchip.Interview.Api/                  # ASP.NET Web API
+Golden.Publication/
+├─ Golden.Publication.Api/                  # ASP.NET Web API
 │  ├─ Program.cs
 │  ├─ appsettings.json
 │  ├─ appsettings.Development.json
 │  ├─ Dockerfile                            # multi-stage build, publishes to /app/publish
 │  └─ Properties/launchSettings.json
 ├─ src/
-│  └─ Microchip.Interview.Data/
+│  └─ Golden.Publication.Data/
 │     └─ Data/publications.xml
 ├─ client/
 │  └─ publications-client/                   # React (Vite + TS)
@@ -200,7 +200,7 @@ Allow inbound:
 ### 2. SSH & Pull Latest Code
 
 ```
-ssh -i your-key.pem ec2-user@<EC2_PUBLIC_IP> cd ~/microchip-interview-private git pull origin main
+ssh -i your-key.pem ec2-user@<EC2_PUBLIC_IP> cd ~/REPO_LINK git pull origin main
 ```
 
 ### 3. Set Client Production Environment
@@ -239,6 +239,11 @@ Rebuild only client
 ```
 docker compose build --no-cache client && docker compose up -d client
 ```
+Rebuild only Reverse-Proxy 
+
+```
+docker compose build --no-cache reverse-proxy && docker compose up -d reverse-proxy
+```
 
 Logs
 
@@ -257,7 +262,7 @@ For fast local development with Vite HMR.
 `$env:ASPNETCORE_ENVIRONMENT = "Development"`
 
 ```
-dotnet run –project Microchip.Interview.Api/Microchip.Interview.Api.csproj
+dotnet run –project Golden.Publication.Api/Golden.Publication.Api.csproj
 ```
 
 API → `http://localhost:5031`

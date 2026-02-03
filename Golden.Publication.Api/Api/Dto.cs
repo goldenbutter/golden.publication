@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-namespace Microchip.Interview.Api.Api
+namespace Golden.Publication.Api
 {
     // List item DTO: required fields only
     public sealed class PublicationListItemDto

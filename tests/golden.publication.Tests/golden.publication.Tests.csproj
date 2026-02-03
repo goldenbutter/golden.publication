@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Microchip.Interview.Data\Microchip.Interview.Data.csproj" />
+    <ProjectReference Include="..\..\src\Golden.Publication.Data\Golden.Publication.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

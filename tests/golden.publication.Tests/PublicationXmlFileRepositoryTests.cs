@@ -1,6 +1,6 @@
-﻿using Microchip.Interview.Data;
+using Golden.Publication.Data;
 
-namespace Microchip.Interview.Tests
+namespace Golden.Publication.Tests
 {
     public class PublicationXmlFileRepositoryTests
     {
@@ -55,6 +55,6 @@ namespace Microchip.Interview.Tests
     public static class Environment
     {
         public static string PublicationXmlFile =
-            $"{System.IO.Directory.GetCurrentDirectory()}\\..\\..\\..\\..\\..\\src\\Microchip.Interview.Data\\Data\\publications.xml";
+            $"{System.IO.Directory.GetCurrentDirectory()}\\..\\..\\..\\..\\..\\src\\Golden.Publication.Data\\Data\\publications.xml";
     }
 }

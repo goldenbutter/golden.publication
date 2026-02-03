@@ -2,8 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Golden.Publication.Api</RootNamespace>
+    <AssemblyName>Golden.Publication.Api</AssemblyName>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Microchip.Interview.Data\Microchip.Interview.Data.csproj" />
+    <ProjectReference Include="..\src\Golden.Publication.Data\Golden.Publication.Data.csproj" />
   </ItemGroup>
 
   <!--<ItemGroup>

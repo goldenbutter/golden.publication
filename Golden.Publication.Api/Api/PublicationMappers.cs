@@ -1,11 +1,10 @@
 using System.Linq;
-using Microchip.Interview.Data.Models;
 
-namespace Microchip.Interview.Api.Api
+namespace Golden.Publication.Api
 {
     public static class PublicationMappers
     {
-        public static PublicationListItemDto ToListItem(Publication p) => new()
+        public static PublicationListItemDto ToListItem(PublicationModel p) => new()
         {
             Id = p.Id.ToString(),
             PublicationType = p.PublicationType,
@@ -14,7 +13,7 @@ namespace Microchip.Interview.Api.Api
             Description = p.Description
         };
 
-        public static PublicationDetailsDto ToDetails(Publication p) => new()
+        public static PublicationDetailsDto ToDetails(PublicationModel p) => new()
         {
             Id = p.Id.ToString(),
             PublicationType = p.PublicationType,
@@ -30,7 +29,8 @@ namespace Microchip.Interview.Api.Api
                 CoverTitle = v.CoverTitle
             }).ToList()
         };
-        public static PublicationVersionDto ToVersion(PublicationVersion v) => new()
+
+        public static PublicationVersionDto ToVersion(PublicationVersionModel v) => new()
         {
             Id = v.Id.ToString(),
             PublicationGuid = v.PublicationGuid.ToString(),
