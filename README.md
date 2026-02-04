@@ -328,35 +328,35 @@ Use a second terminal for `npm run dev`.
 
 - **Publication** JSON data (Localhost)
 
-<img width="500" height="750" alt="publication-json-localhost" src="https://github.com/user-attachments/assets/b4730708-e2d9-4aeb-a39d-5a3b6aee64a2" />
+<img width="500" height="750" alt="publication-json-localhost" src="assets\publication-json-localhost.png" />
 
 
 
 - **Publication** JSON data (EC2)
 
-<img width="650" height="910" alt="publication-json-ec2" src="https://github.com/user-attachments/assets/5552199b-ac1c-4ef4-b8ae-27fba4901d70" />
+<img width="650" height="910" alt="publication-json-ec2" src="assets\publication-json-ec2.png" />
 
 
 ## SINGLE-port testing
 
 - **SPA homepage** (Frontend) --> **Localhost** (no port)
 
-<img width="550" height="600" alt="spa-home-localhost" src="https://github.com/user-attachments/assets/80afcd5a-ca66-42df-8dd1-98b190a09f8b" />
+<img width="550" height="600" alt="spa-home-localhost" src="assets\spa-home-localhost.png" />
 
 
 - **SPA homepage** (Frontend) --> **EC2 instance** (no port)
 
-<img width="550" height="600" alt="spa-home-ec2" src="https://github.com/user-attachments/assets/001d016d-e800-44f3-a0b8-e6039f978e94" />
+<img width="550" height="600" alt="spa-home-ec2" src="assets\spa-home-ec2.png" />
 
 
 - **Swagger UI** (Backend) -->  **Localhost** (no port)
 
-<img width="1800" height="650" alt="swagger-ui-localhost" src="https://github.com/user-attachments/assets/63eb2555-9a22-4502-a767-1effe780eff6" />
+<img width="1800" height="650" alt="swagger-ui-localhost" src="assets\swagger-ui-localhost.png" />
 
 
 - **Swagger UI** (Backend) -->  **EC2 instance** (no port)
 
-<img width="1800" height="680" alt="swagger-ui-ec2" src="https://github.com/user-attachments/assets/47760997-21f5-451c-b318-c134fc6c8071" />
+<img width="1800" height="680" alt="swagger-ui-ec2" src="assets\swagger-ui-ec2.png" />
 
 
 
@@ -365,11 +365,11 @@ Use a second terminal for `npm run dev`.
 - **SPA homepage** (Frontend) --> **Localhost** (port : `5173`)
 
 
-<img width="550" height="600" alt="spa-home-localhost-5173" src="https://github.com/user-attachments/assets/55ea9bd4-1918-429f-95d2-19e8d1254155" />
+<img width="550" height="600" alt="spa-home-localhost-5173" src="assets\spa-home-localhost-5173.png" />
 
 - **Swagger UI** (Backend) --> **Localhost** (port : `5031`)
 
-<img width="1800" height="650" alt="swagger-ui-localhost-5031" src="https://github.com/user-attachments/assets/cca07372-6320-4918-9a91-16d42e38f5f8" />
+<img width="1800" height="650" alt="swagger-ui-localhost-5031" src="assets\swagger-ui-localhost-5031.png" />
 
 
 
