@@ -1,6 +1,7 @@
 using Golden.Publication.Api.Domain;
+using Golden.Publication.Api.Infrastructure;
 using Golden.Publication.Data;
-//using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// ------------------ Conditional CORS (based on appsettings) ------------------
-
+// Conditional CORS (based on appsettings)
 var enableCors = builder.Configuration.GetValue<bool>("EnableCors");
 if (enableCors)
 {
@@ -28,73 +28,35 @@ if (enableCors)
     });
 }
 
-// === Registered XML-backed repository ===
-builder.Services.AddSingleton<IPublicationRepository>(sp =>
-{
-    var env = sp.GetRequiredService<IHostEnvironment>();
+// PostgreSQL via EF Core — connection string supplied via env var:
+//   ConnectionStrings__Publications="Host=...;Database=...;Username=...;Password=..."
+builder.Services.AddDbContext<PublicationDbContext>(opts =>
+    opts.UseNpgsql(builder.Configuration.GetConnectionString("Publications")));
 
-
-    // Prefer explicit env var inside container
-    var fromEnv = Environment.GetEnvironmentVariable("PUBLICATION_XML_FILE");
-    if (!string.IsNullOrWhiteSpace(fromEnv) && File.Exists(fromEnv))
-    {
-        Console.WriteLine($"[Startup] Using PUBLICATION_XML_FILE={fromEnv}");
-        return new XmlPublicationRepository(fromEnv);
-    }
-
-    // Fallback for local
-    var solutionRoot = Path.GetFullPath(Path.Combine(env.ContentRootPath, ".."));
-    var xmlPath = Path.Combine(solutionRoot, "src", "Golden.Publication.Data", "Data", "publications.xml");
-
-    Console.WriteLine($"[Startup] publications.xml path: {xmlPath}");
-
-    return new XmlPublicationRepository(xmlPath);
-});
-
-// Registered domain service
+builder.Services.AddScoped<IPublicationRepository, EfPublicationRepository>();
 builder.Services.AddScoped<PublicationService>();
+
 var app = builder.Build();
 
+// Migrate DB schema and seed from XML on every cold start (idempotent)
+using (var scope = app.Services.CreateScope())
+{
+    var ctx    = scope.ServiceProvider.GetRequiredService<PublicationDbContext>();
+    var env    = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    await DatabaseSeeder.SeedAsync(ctx, env, logger);
+}
 
 // Swagger
-//app.UseSwagger();
-
-// Pipeline
-app.UseSwagger(c =>
-{
-    // keep a stable path for the JSON
-    c.RouteTemplate = "swagger/{documentName}/swagger.json";
-});
-
-
+app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentName}/swagger.json"; });
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Publications API v1");
     c.RoutePrefix = "swagger";
-
-    //c.DocumentTitle = "Publications API – Swagger";
-    //c.ConfigObject.DocExpansion = Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None;
-
-    // Optional: keep your injected assets
-    //c.InjectStylesheet("/swagger/custom.css");
-    //c.InjectJavascript("/swagger/custom.js");
-
-    // IMPORTANT: resource name = {AssemblyDefaultNamespace}.Swagger.index.html
-    //c.IndexStream = () => typeof(Program).Assembly
-    //    .GetManifestResourceStream("Golden.Publication.Api.Swagger.index.html");
 });
 
-
-// === Enable CORS === TOGGLED with reverse proxy setting ===
 if (enableCors)
-{
     app.UseCors("AllowClient");
-}
 
-//app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
-
-
-
-
