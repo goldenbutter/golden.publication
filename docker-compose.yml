@@ -2,6 +2,24 @@
 
 services:
 
+  postgres:
+    container_name: publications_postgres
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: golden_publications
+      POSTGRES_USER: golden_user
+      POSTGRES_PASSWORD: golden_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U golden_user -d golden_publications"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: always
+    networks:
+      - appnet
+
   api:
     container_name: publications_api
     build:
@@ -12,6 +30,10 @@ services:
       - "8080"
     environment:
       ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Publications: "Host=postgres;Database=golden_publications;Username=golden_user;Password=golden_pass"
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: always
     networks:
       - appnet
@@ -43,6 +65,9 @@ services:
     restart: always
     networks:
       - appnet
+
+volumes:
+  postgres_data:
 
 networks:
   appnet:

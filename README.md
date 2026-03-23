@@ -1,7 +1,8 @@
 # Publications – Full‑Stack Demo (ASP.NET API + React SPA + Docker + Jenkins CI/CD)
 A complete full‑stack demo application featuring:
-- **ASP.NET Web API** (search, sort, pagination, details from publications.xml)
+- **ASP.NET Web API** (search, sort, pagination, details — backed by PostgreSQL via EF Core)
 - **React (Vite + TypeScript)** SPA frontend
+- **PostgreSQL 17** database with automatic schema creation and XML seed on first run
 - **Docker & Docker Compose** for containerized deployment
 - **Nginx reverse proxy** for single‑port hosting (SPA + API + Swagger)
 - **Jenkins CI/CD Pipeline** with **GitHub Webhook** for automatic deployments
@@ -35,10 +36,10 @@ Supports:
 
 ### **API (ASP.NET)**
 - Endpoints:
- - `GET /publications` — list, search, sort, paginate  
- - `GET /publications/{id}` — details + versions  
-- Swagger UI → `/swagger/`  
-- Reads `publications.xml` (copied into image)
+ - `GET /publications` — list, search, sort, paginate
+ - `GET /publications/{id}` — details + versions
+- Swagger UI → `/swagger/`
+- Reads from **PostgreSQL** via EF Core (Npgsql). On first startup, automatically creates the schema and seeds data from the bundled `publications.xml`.
 
 ### **Client (React + Vite + TypeScript)**
 - SPA for listing/searching publications  
@@ -117,9 +118,9 @@ Golden.Publication/
 ## Tech Stack
 
 ### **Backend**
-- ASP.NET 10 Web API  
-- LINQ, XML parsing  
-- Swagger / OpenAPI  
+- ASP.NET 10 Web API
+- EF Core 9 + Npgsql (PostgreSQL)
+- Swagger / OpenAPI
 
 ### **Frontend**
 - React  
@@ -143,6 +144,7 @@ Golden.Publication/
 - **.NET SDK 10.0**
 - **Docker & Docker Compose**
 - **PowerShell / Bash**
+- **PostgreSQL** — only needed for local two-port dev (without Docker). For single-port Docker dev, Postgres runs as a container automatically.
 
 ### CI/CD (Jenkins Deployment)
 - **Jenkins** (latest LTS) on EC2  
@@ -155,24 +157,35 @@ Golden.Publication/
 
 ## <span id="environment-variables">Environment Variables</span>
 
-## Client (Vite)
+### API — Database connection
 
-### `.env.development` (two‑port dev)
+The connection string is supplied entirely via environment variable — no code changes between dev and prod:
+
+```
+ConnectionStrings__Publications=Host=<host>;Database=golden_publications;Username=<user>;Password=<pass>
+```
+
+| Context | Where it's set |
+|---|---|
+| Docker (all-in-one) | `docker-compose.yml` `environment:` section — points to the `postgres` service |
+| Local two-port dev | `appsettings.Development.json` — defaults to `Host=localhost;...;Username=postgres;Password=postgres` |
+| EC2 / prod | Set as an OS/shell env var or in your secrets manager |
+
+The `PUBLICATION_XML_FILE` env var controls the seed data path. In Docker it defaults to `/app/Data/publications.xml` (set in the API Dockerfile). Only needed on first run when the `publications` table is empty.
+
+### Client (Vite)
+
+#### `.env.development` (two‑port dev)
 
 `VITE_API_BASE=http://localhost:5031`
 
-### `.env.production` (single‑port reverse proxy)
+#### `.env.production` (single‑port reverse proxy)
 
 `VITE_API_BASE=""`
 
-If SPA is served under `/app`, update:
-- `vite.config.ts` → base: `/app/`
-- React Router → basename=`/app`
-- Nginx → `try_files $uri /index.html;`
-
 ## <span id="local-single-port-recommended">Local – Single‑Port (Recommended)</span>
 
-Run the full stack via **Docker Compose** (production‑like, one port):
+Run the full stack via **Docker Compose** (production‑like, one port). This starts four services: `postgres`, `api`, `client`, `reverse-proxy`. The API waits for Postgres to be healthy, then creates the schema and seeds data automatically — no manual DB setup required.
 
 ```
 docker compose down --volumes --remove-orphans

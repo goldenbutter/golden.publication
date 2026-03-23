@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet --version)",
+      "Bash(dotnet tool:*)",
+      "Bash('/c/Program Files/dotnet/dotnet' --version)",
+      "Bash('/c/Program Files/dotnet/dotnet' tool list -g)",
+      "Bash(docker compose:*)"
+    ]
+  }
+}
