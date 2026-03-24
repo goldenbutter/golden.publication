@@ -1,4 +1,5 @@
 import type { PublicationsListResponse, PublicationDetails } from "./types";
+import { apiFetch } from "./httpClient";
 
 // Read API base from Vite env at build time; fallback for local dev.
 const API_BASE = (import.meta.env?.VITE_API_BASE as string | undefined) ?? "http://localhost:5031";
@@ -34,7 +35,7 @@ export async function fetchPublications(params: {
 }): Promise<PublicationsListResponse> {
   const query = buildQuery(params);
   const url = `${API_BASE}/publications?${query}`;
-  const res = await fetch(url);
+  const res = await apiFetch(url);
 
   if (!res.ok) {
     console.error("fetchPublications failed", { url, status: res.status, statusText: res.statusText });
@@ -45,7 +46,7 @@ export async function fetchPublications(params: {
 
 export async function fetchPublicationById(id: string): Promise<PublicationDetails> {
   const url = `${API_BASE}/publications/${id}`;
-  const res = await fetch(url);
+  const res = await apiFetch(url);
 
   if (!res.ok) {
     console.error("fetchPublicationById failed", { url, status: res.status, statusText: res.statusText });

@@ -84,6 +84,14 @@ Supports:
                         └───────────────────────────┘
 ```
 
+## Future Development Ideas
+
+- Email-based login flow (username/password remains current implementation)
+- Multi-session/device support (current auth is single-session)
+- Social login providers (e.g., Google, GitHub)
+- Password reset workflow
+- Email verification workflow
+
 <img width="1692" height="862" alt="architecture-diagram" src="assets\architecture-diagram.gif" />
 
 
@@ -181,7 +189,7 @@ The `PUBLICATION_XML_FILE` env var controls the seed data path. In Docker it def
 
 #### `.env.production` (single‑port reverse proxy)
 
-`VITE_API_BASE=""`
+`VITE_API_BASE=/api`
 
 ## <span id="local-single-port-recommended">Local – Single‑Port (Recommended)</span>
 

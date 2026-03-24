@@ -1,7 +1,10 @@
 using Golden.Publication.Api.Domain;
 using Golden.Publication.Api.Infrastructure;
 using Golden.Publication.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Auth"));
+var authSettings = builder.Configuration.GetSection("Auth").Get<AuthSettings>() ?? new AuthSettings();
+if (string.IsNullOrWhiteSpace(authSettings.Key))
+{
+    throw new InvalidOperationException("Auth:Key configuration is required.");
+}
 
 // Conditional CORS (based on appsettings)
 var enableCors = builder.Configuration.GetValue<bool>("EnableCors");
@@ -23,7 +33,8 @@ if (enableCors)
         {
             policy.WithOrigins(allowed)
                   .AllowAnyHeader()
-                  .AllowAnyMethod();
+                  .AllowAnyMethod()
+                  .AllowCredentials();
         });
     });
 }
@@ -35,6 +46,28 @@ builder.Services.AddDbContext<PublicationDbContext>(opts =>
 
 builder.Services.AddScoped<IPublicationRepository, EfPublicationRepository>();
 builder.Services.AddScoped<PublicationService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
+builder.Services.AddSingleton<ITokenService, TokenService>();
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+            ValidIssuer = authSettings.Issuer,
+            ValidAudience = authSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.Key)),
+            ClockSkew = TimeSpan.FromMinutes(1)
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -57,6 +90,8 @@ app.UseSwaggerUI(c =>
 
 if (enableCors)
     app.UseCors("AllowClient");
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 app.Run();

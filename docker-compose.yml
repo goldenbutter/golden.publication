@@ -31,6 +31,11 @@ services:
     environment:
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__Publications: "Host=postgres;Database=golden_publications;Username=golden_user;Password=golden_pass"
+      Auth__Issuer: Golden.Publication.Api
+      Auth__Audience: Golden.Publication.Client
+      Auth__Key: docker-local-super-secret-signing-key
+      Auth__AccessTokenHours: 24
+      Auth__RefreshTokenHours: 24
     depends_on:
       postgres:
         condition: service_healthy
