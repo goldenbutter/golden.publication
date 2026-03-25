@@ -41,6 +41,11 @@ Supports:
 - Swagger UI → `/swagger/`
 - Reads from **PostgreSQL** via EF Core (Npgsql). On first startup, automatically creates the schema and seeds data from the bundled `publications.xml`.
 
+### **Authentication System**
+- **Hybrid Token Model:** Short-lived JWT access tokens (in-memory) + Long-lived rotation-based Refresh Tokens (Secure HttpOnly cookies).
+- **Security:** PBKDF2 password hashing, token revocation tracking, and automatic silent refresh in the frontend.
+- **Endpoints:** `/auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, and `/auth/me`.
+
 ### **Client (React + Vite + TypeScript)**
 - SPA for listing/searching publications  
 - API base configured via Vite env (`VITE_API_BASE`)
@@ -48,8 +53,9 @@ Supports:
 ### **Reverse Proxy (Nginx)**
 - One public port (**80**)  
 - Routes:
- - `/` → SPA  
- - `/publications` → API  
+ - `/` → SPA
+ - `/auth` → API (Authentication)
+ - `/publications` → API (Data)
  - `/swagger/` → Swagger UI
 
 ## Architecture Diagram
@@ -83,6 +89,14 @@ Supports:
                         │  (SPA + API + Swagger)    │
                         └───────────────────────────┘
 ```
+
+## Future Development Ideas
+
+- Email-based login flow (username/password remains current implementation)
+- Multi-session/device support (current auth is single-session)
+- Social login providers (e.g., Google, GitHub)
+- Password reset workflow
+- Email verification workflow
 
 <img width="1692" height="862" alt="architecture-diagram" src="assets\architecture-diagram.gif" />
 
@@ -181,7 +195,7 @@ The `PUBLICATION_XML_FILE` env var controls the seed data path. In Docker it def
 
 #### `.env.production` (single‑port reverse proxy)
 
-`VITE_API_BASE=""`
+`VITE_API_BASE=/api`
 
 ## <span id="local-single-port-recommended">Local – Single‑Port (Recommended)</span>
 
@@ -326,11 +340,12 @@ Use a second terminal for `npm run dev`.
 - `/publication/:id` — Details page
 
 ### Reverse Proxy Routes (Nginx)
-- `/` → React SPA  
-- `/publications` → ASP.NET API  
-- `/swagger/` → Swagger UI  
+- `/` → React SPA
+- `/auth` → ASP.NET API (Authentication)
+- `/publications` → ASP.NET API
+- `/swagger/` → Swagger UI
 
----
+
 
 
 
@@ -480,3 +495,35 @@ The pipeline ensures that every push to `main` triggers a clean build, test, and
                   │    http://EC2_PUBLIC_IP  │
                   │    SPA + API + Swagger   │
                   └──────────────────────────┘
+```
+
+## Testing
+
+### Backend Tests (xUnit)
+Run all backend unit and integration tests:
+```bash
+dotnet test tests/golden.publication.Tests/golden.publication.Tests.csproj
+```
+
+### Frontend Tests (Vitest)
+Navigate to the client directory and run tests:
+```bash
+cd client/publications-client
+npm test
+```
+To run tests with a UI:
+```bash
+npm run test:ui
+```
+<img width="750" height="700" alt="frontend_registration" src="assets\frontend_registration.png" />
+
+<img width="750" height="700" alt="frontend_login" src="assets\frontend_login.png" />
+
+
+### Database Verification
+To verify that users are correctly stored in the PostgreSQL database within the Docker container:
+```bash
+docker exec -it publications_postgres psql -U golden_user -d golden_publications -c "SELECT id, username, created_at FROM users;"
+```
+
+<img width="814" height="234" alt="database_test" src="assets\database_test.png" />

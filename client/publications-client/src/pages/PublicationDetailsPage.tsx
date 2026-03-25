@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchPublicationById } from "../api/client";
 import type { PublicationDetails } from "../api/types";
+import AuthStatus from "../components/auth/AuthStatus";
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  return "Failed to load";
+}
 
 export default function PublicationDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -19,8 +24,8 @@ export default function PublicationDetailsPage() {
           const res = await fetchPublicationById(id);
           if (mounted) setData(res);
         }
-      } catch (e: any) {
-        setError(e.message ?? "Failed to load");
+      } catch (e: unknown) {
+        setError(getErrorMessage(e));
       } finally {
         if (mounted) setLoading(false);
       }
@@ -33,6 +38,7 @@ export default function PublicationDetailsPage() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: 16 }}>
+      <AuthStatus />
       <Link to="/">&larr; Back</Link>
       <h1>Publication Details</h1>
 

@@ -4,7 +4,12 @@ import type { PublicationListItem, PublicationsListResponse } from "../api/types
 import SearchBar from "../components/SearchBar";
 import SortControls from "../components/SortControls";
 import Pagination from "../components/Pagination";
+import AuthStatus from "../components/auth/AuthStatus";
 import { Link } from "react-router-dom";
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  return "Failed to load";
+}
 
 export default function PublicationsListPage() {
   const [items, setItems] = useState<PublicationListItem[]>([]);
@@ -32,8 +37,8 @@ export default function PublicationsListPage() {
       });
       setItems(data.items);
       setTotal(data.total);
-    } catch (e: any) {
-      setError(e.message ?? "Failed to load");
+    } catch (e: unknown) {
+      setError(getErrorMessage(e));
     } finally {
       setLoading(false);
     }
@@ -46,6 +51,7 @@ export default function PublicationsListPage() {
 
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: 16 }}>
+      <AuthStatus />
 	  <h1 style={{ color: "red" }}>🔥 GOLDEN PUBLICATIONS 🔥</h1>
       <SearchBar
         initialTitle={title}

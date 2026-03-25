@@ -13,6 +13,7 @@ public static class DatabaseSeeder
     public static async Task SeedAsync(PublicationDbContext context, IHostEnvironment env, ILogger logger)
     {
         await EnsureSchemaAsync(context, logger);
+        await EnsureDefaultAdminUserAsync(context, logger);
 
         if (await context.Publications.AnyAsync())
         {
@@ -49,21 +50,6 @@ public static class DatabaseSeeder
                 CONSTRAINT ""PK___EFMigrationsHistory"" PRIMARY KEY (""MigrationId"")
             );");
 
-        // Skip schema creation if migration already recorded as applied
-        var alreadyApplied = await context.Database
-            .SqlQueryRaw<int>($@"
-                SELECT 1 AS ""Value""
-                FROM ""__EFMigrationsHistory""
-                WHERE ""MigrationId"" = '{MigrationId}'")
-            .AnyAsync();
-
-        if (alreadyApplied)
-        {
-            logger.LogInformation("[Seeder] Migration {Id} already applied.", MigrationId);
-            return;
-        }
-
-        logger.LogInformation("[Seeder] Applying schema for migration {Id}.", MigrationId);
 
         await context.Database.ExecuteSqlRawAsync(@"
             CREATE TABLE IF NOT EXISTS publications (
@@ -91,12 +77,92 @@ public static class DatabaseSeeder
             CREATE INDEX IF NOT EXISTS ""IX_publication_versions_publication_guid""
             ON publication_versions(publication_guid);");
 
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE TABLE IF NOT EXISTS users (
+                id UUID NOT NULL,
+                username TEXT NOT NULL,
+                password_hash TEXT NOT NULL,
+                role TEXT NOT NULL,
+                is_active BOOLEAN NOT NULL,
+                created_at TIMESTAMPTZ NOT NULL,
+                updated_at TIMESTAMPTZ NOT NULL,
+                last_login_at TIMESTAMPTZ NULL,
+                CONSTRAINT ""PK_users"" PRIMARY KEY (id)
+            );");
+
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE UNIQUE INDEX IF NOT EXISTS ""IX_users_username""
+            ON users(username);");
+
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE TABLE IF NOT EXISTS refresh_tokens (
+                id UUID NOT NULL,
+                user_id UUID NOT NULL,
+                token_hash TEXT NOT NULL,
+                expires_at TIMESTAMPTZ NOT NULL,
+                revoked_at TIMESTAMPTZ NULL,
+                replaced_by_token_hash TEXT NULL,
+                created_at TIMESTAMPTZ NOT NULL,
+                created_by_ip TEXT NULL,
+                revoked_by_ip TEXT NULL,
+                CONSTRAINT ""PK_refresh_tokens"" PRIMARY KEY (id),
+                CONSTRAINT ""FK_refresh_tokens_users_user_id""
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );");
+
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE UNIQUE INDEX IF NOT EXISTS ""IX_refresh_tokens_token_hash""
+            ON refresh_tokens(token_hash);");
+
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE INDEX IF NOT EXISTS ""IX_refresh_tokens_user_id""
+            ON refresh_tokens(user_id);");
+
+        await context.Database.ExecuteSqlRawAsync(@"
+            CREATE INDEX IF NOT EXISTS ""IX_refresh_tokens_expires_at""
+            ON refresh_tokens(expires_at);");
+
+        var alreadyApplied = await context.Database
+            .SqlQueryRaw<int>($@"
+                SELECT 1 AS ""Value""
+                FROM ""__EFMigrationsHistory""
+                WHERE ""MigrationId"" = '{MigrationId}'")
+            .AnyAsync();
+
         // Record migration as applied so `dotnet ef` sees it as already done
-        await context.Database.ExecuteSqlRawAsync($@"
-            INSERT INTO ""__EFMigrationsHistory"" (""MigrationId"", ""ProductVersion"")
-            VALUES ('{MigrationId}', '{EfProductVersion}');");
+        if (!alreadyApplied)
+        {
+            await context.Database.ExecuteSqlRawAsync($@"
+                INSERT INTO ""__EFMigrationsHistory"" (""MigrationId"", ""ProductVersion"")
+                VALUES ('{MigrationId}', '{EfProductVersion}');");
+        }
 
         logger.LogInformation("[Seeder] Schema created successfully.");
+    }
+
+    private static async Task EnsureDefaultAdminUserAsync(PublicationDbContext context, ILogger logger)
+    {
+        var existing = await context.Users.AnyAsync(x => x.Username.ToLower() == "admin");
+        if (existing)
+            return;
+
+        var hasher = new PasswordHasher();
+        var now = DateTimeOffset.UtcNow;
+        var admin = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = "admin",
+            PasswordHash = hasher.Hash("admin"),
+            Role = "admin",
+            IsActive = true,
+            CreatedAt = now,
+            UpdatedAt = now,
+            LastLoginAt = null
+        };
+
+        context.Users.Add(admin);
+        await context.SaveChangesAsync();
+        logger.LogInformation("[Seeder] Default admin user created (username: admin).");
     }
 
     private static string? ResolveXmlPath(IHostEnvironment env)

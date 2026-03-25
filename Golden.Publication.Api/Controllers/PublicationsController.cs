@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Golden.Publication.Api;
 using Golden.Publication.Api.Domain;
@@ -5,6 +6,7 @@ using Golden.Publication.Api.Domain;
 namespace Golden.Publication.Api.Controllers
 {
     [ApiController]
+    [Authorize]
 //    [Route("[controller]")]
     [Route("publications")] 
     public sealed class PublicationsController : ControllerBase
