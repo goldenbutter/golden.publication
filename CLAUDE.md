@@ -171,28 +171,26 @@ Sorting supports comma-separated fields: `title`, `publication_type`, `isbn`, `d
 
 ### Branch Strategy
 - `main` — production only, never commit here directly
-- `claude-dev` — active development branch, all work happens here
+- `claude-dev` or `warp-dev` — active development branch, all work happens here
 - `feature/*` — short-lived feature branches (e.g. feature/postgresql, feature/auth-jwt)
 
 
 ### Development Flow Per Phase
-1. All development work goes into `claude-dev` branch. After developement and testing completed when user confirm then for merging purpose go to 2nd point
-2. For each new feature, create branch from `claude-dev`:
-   `git checkout -b feature/<name>` (e.g. feature/auth-jwt)
-3. When feature is complete, commit to feature branch
-4. STOP — do not merge. Notify user: "feature/auth-jwt is ready for review"
-5. User creates GitHub issue, provides issue number
-6. Add issue reference to final commit message: "feat: add JWT auth (#12)"
-7. User creates PR and merges feature → main in GitHub
-8. User deletes feature branch in GitHub after merge
-9. After merge confirmed by user: pull latest claude-dev locally
-10. claude-dev and main stay in sync only after user-approved PR to main
+1. All development work goes into `claude-dev` or `warp-dev` branch. After developement and testing completed when user confirm then for merging purpose go to 2nd point
+   - Commit message should reference the issue (e.g., "Resolve : Implement authentication system").
+2. For each new feature, create branch from `claude-dev` or `warp-dev`:   
+   - `git checkout -b feature/<name>` (e.g. feature/auth-jwt)
+3. STOP — do not merge. Notify user: "feature/auth-jwt is ready for review"
+4. User creates GitHub issue, provides issue number
+5. Add issue reference to final commit message in feature branch: "feat: add JWT auth (#12)"
+6. User creates PR and merges feature → main in GitHub
+7. Agent deletes feature branch in GitHub after User confirms merge is completed
+8. After merge confirmed by user: pull latest `claude-dev` or `warp-dev` locally
 
 ### Rules Claude Must Never Break
 - Never commit to main directly
 - Never create a PR — user always does this in GitHub
 - Never merge branches — user always does this in GitHub
-- Never delete branches — user always does this in GitHub
 - Always wait for user to confirm issue number before referencing it
 - Always confirm current branch before any commit: `git branch --show-current`
 

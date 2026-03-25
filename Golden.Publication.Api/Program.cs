@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Auth"));
 var authSettings = builder.Configuration.GetSection("Auth").Get<AuthSettings>() ?? new AuthSettings();
-if (string.IsNullOrWhiteSpace(authSettings.Key))
+if (builder.Environment.EnvironmentName != "Testing" && string.IsNullOrWhiteSpace(authSettings.Key))
 {
     throw new InvalidOperationException("Auth:Key configuration is required.");
 }
@@ -41,8 +41,11 @@ if (enableCors)
 
 // PostgreSQL via EF Core — connection string supplied via env var:
 //   ConnectionStrings__Publications="Host=...;Database=...;Username=...;Password=..."
-builder.Services.AddDbContext<PublicationDbContext>(opts =>
-    opts.UseNpgsql(builder.Configuration.GetConnectionString("Publications")));
+if (builder.Environment.EnvironmentName != "Testing")
+{
+    builder.Services.AddDbContext<PublicationDbContext>(opts =>
+        opts.UseNpgsql(builder.Configuration.GetConnectionString("Publications")));
+}
 
 builder.Services.AddScoped<IPublicationRepository, EfPublicationRepository>();
 builder.Services.AddScoped<PublicationService>();
@@ -54,15 +57,16 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        var settingsScope = builder.Configuration.GetSection("Auth").Get<AuthSettings>() ?? new AuthSettings();
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,
-            ValidIssuer = authSettings.Issuer,
-            ValidAudience = authSettings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.Key)),
+            ValidIssuer = settingsScope.Issuer,
+            ValidAudience = settingsScope.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settingsScope.Key ?? "")),
             ClockSkew = TimeSpan.FromMinutes(1)
         };
     });
@@ -74,10 +78,13 @@ var app = builder.Build();
 // Migrate DB schema and seed from XML on every cold start (idempotent)
 using (var scope = app.Services.CreateScope())
 {
-    var ctx    = scope.ServiceProvider.GetRequiredService<PublicationDbContext>();
-    var env    = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
-    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    await DatabaseSeeder.SeedAsync(ctx, env, logger);
+    var env = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
+    if (!env.IsEnvironment("Testing"))
+    {
+        var ctx = scope.ServiceProvider.GetRequiredService<PublicationDbContext>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        await DatabaseSeeder.SeedAsync(ctx, env, logger);
+    }
 }
 
 // Swagger
@@ -95,3 +102,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
+
+public partial class Program { }
