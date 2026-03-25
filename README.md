@@ -495,6 +495,7 @@ The pipeline ensures that every push to `main` triggers a clean build, test, and
                   │    http://EC2_PUBLIC_IP  │
                   │    SPA + API + Swagger   │
                   └──────────────────────────┘
+```
 
 ## Testing
 
